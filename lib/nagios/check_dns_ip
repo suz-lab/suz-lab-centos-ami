@@ -26,7 +26,7 @@ while getopts c:w:n: OPTNAME; do
     esac
 done
 
-IP_FILE=`dirname $0`/../../run/check_dns_ip-$DNS_NAME.txt
+IP_FILE=`dirname $0`/../../var/run/check_dns_ip-$DNS_NAME.txt
 IP_LIST=`dig +noall +answer $DNS_NAME | awk '{print $5}' | sort`
 
 if [ ! -f $IP_FILE ]; then
