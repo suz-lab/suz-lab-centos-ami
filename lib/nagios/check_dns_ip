@@ -8,7 +8,7 @@ trap 'echo "UNKNOWN: $?"; exit $STATE_UNKNOWN' ERR
 WARN=1
 CRIT=1
 
-while getopts c:w:e: OPTNAME; do
+while getopts c:w:n: OPTNAME; do
     case "$OPTNAME" in
     w)
         WARN="$OPTARG"
@@ -16,7 +16,7 @@ while getopts c:w:e: OPTNAME; do
     c)
         CRIT="$OPTARG"
         ;;
-    e)
+    n)
         DNS_NAME="$OPTARG"
         ;;
     *)
@@ -26,7 +26,7 @@ while getopts c:w:e: OPTNAME; do
     esac
 done
 
-IP_FILE=`dirname $0`/../run/check_dns_ip-$DNS_NAME.txt
+IP_FILE=`dirname $0`/../../run/check_dns_ip-$DNS_NAME.txt
 IP_LIST=`dig +noall +answer $DNS_NAME | awk '{print $5}' | sort`
 
 if [ ! -f $IP_FILE ]; then
