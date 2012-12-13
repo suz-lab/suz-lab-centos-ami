@@ -97,7 +97,7 @@
 	            "InstanceType": { "Ref": "StepInstanceType" },
 	            "Name": { "Ref": "StepName" },
 	            "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-		        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStepSouorce" ] },
+		        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStepSource" ] },
 			{ "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStep" ] },
                         { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
 		    ] ] },

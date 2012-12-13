@@ -1,0 +1,53 @@
+#!/bin/sh
+
+. `dirname $0`/utils.sh
+
+set -e
+trap 'echo "UNKNOWN: $?"; exit $STATE_UNKNOWN' ERR
+
+WARN=1
+CRIT=1
+
+while getopts c:w:e: OPTNAME; do
+    case "$OPTNAME" in
+    w)
+        WARN="$OPTARG"
+        ;;
+    c)
+        CRIT="$OPTARG"
+        ;;
+    e)
+        DNS_NAME="$OPTARG"
+        ;;
+    *)
+        echo "UNKNOWN: Usage"
+        exit $STATE_UNKNOWN
+        ;;
+    esac
+done
+
+IP_FILE=`dirname $0`/../run/check_dns_ip-$DNS_NAME.txt
+IP_LIST=`dig +noall +answer $DNS_NAME | awk '{print $5}' | sort`
+
+if [ ! -f $IP_FILE ]; then
+    echo $IP_LIST > $IP_FILE
+    echo "OK : Initial Setup"
+    exit $STATE_OK
+fi
+
+COUNT=`echo $IP_LIST | diff - $IP_FILE | wc -l`
+
+if   [ $COUNT -ge $CRIT ]; then
+    echo "CRITICAL: IP Address Chenged"
+    echo $IP_LIST > $IP_FILE
+    exit $STATE_CRITICAL
+elif [ $COUNT -ge $WARN ]; then
+    echo "WARNING: IP Address Chenged"
+    echo $IP_LIST > $IP_FILE
+    exit $STATE_WARNING
+elif [ $COUNT -eq 0 ]; then
+    echo "OK: IP Address Not Chenge"
+    exit $STATE_OK
+fi
+
+echo "UNKNOWN: End"; exit $STATE_UNKNOWN
