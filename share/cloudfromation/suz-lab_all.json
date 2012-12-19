@@ -78,7 +78,7 @@
 	"CloudFormationStackOperationalFirewall" : {
   	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL" : "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_operational-firewall-0.0.1.json",
+	        "TemplateURL" : "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_operational-firewall-0.0.2.json",
 	        "Parameters" : {
 	            "VpcCidrIp": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcCidrIpBasic" ] },
 		    "VpcId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcIdBasic" ] },
