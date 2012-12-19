@@ -36,91 +36,99 @@
 	"EC2SecurityGroupStepSource": {
             "Properties": {
                 "GroupDescription": { "Fn::Join": [ "-", [ "op-step", { "Ref": "SourceName" } ] ] },
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupAdminSource": {
             "Properties": {
                 "GroupDescription": { "Fn::Join": [ "-", [ "op-admin", { "Ref": "SourceName" } ] ] },
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupStep": {
             "Properties": {
                 "GroupDescription": "op-step", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupEc2": {
             "Properties": {
                 "GroupDescription": "op-ec2", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupAdminLb": {
             "Properties": {
                 "GroupDescription": "op-admin-lb", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupNat": {
             "Properties": {
                 "GroupDescription": "op-nat", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupAdmin": {
             "Properties": {
                 "GroupDescription": "op-admin", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupDbMysql": {
             "Properties": {
                 "GroupDescription": "op-db-mysql", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupDbOracle": {
             "Properties": {
                 "GroupDescription": "op-db-oracle", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupMaintenance": {
             "Properties": {
                 "GroupDescription": "op-maintenance", 
-                "VpcId": {
-                    "Ref": "VpcId"
-                }
+                "VpcId": { "Ref": "VpcId" }
             }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+         "EC2SecurityGroupVpc": {
+            "Properties": {
+                "GroupDescription": "op-vpc",
+                "VpcId": { "Ref": "VpcId" }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "EC2SecurityGroupPublic": {
+            "Properties": {
+                "GroupDescription": "op-public",
+                "VpcId": { "Ref": "VpcId" }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "EC2SecurityGroupProtected": {
+            "Properties": {
+                "GroupDescription": "op-protected",
+                "VpcId": { "Ref": "VpcId" }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "EC2SecurityGroupPrivate": {
+            "Properties": {
+                "GroupDescription": "op-private",
+                "VpcId": { "Ref": "VpcId" }
+            },
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupIngressStepSourceSshSource": {
@@ -392,6 +400,86 @@
                 "ToPort": "443",
                 "CidrIp": "0.0.0.0/0"
             }
+        },
+        "EC2SecurityGroupIngressVpcInternal": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupVpc" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupVpc" }
+            }
+        },
+        "EC2SecurityGroupEgressVpcInternal": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupVpc" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupVpc" }
+            }   
+        },
+        "EC2SecurityGroupIngressPublicInternal": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupPublic" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupPublic" }
+            }   
+        },  
+        "EC2SecurityGroupEgressPublicInternal": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupPublic" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupPublic" }
+            }        
+        },       
+        "EC2SecurityGroupIngressProtectedInternal": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupProtected" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupProtected" }
+            }   
+        },  
+        "EC2SecurityGroupEgressProtectedInternal": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupProtected" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupProtected" }
+            }        
+        },       
+        "EC2SecurityGroupIngressPrivateInternal": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupPrivate" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupPrivate" }
+            }   
+        },  
+        "EC2SecurityGroupEgressPrivateInternal": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupPrivate" },
+                "IpProtocol": "-1",
+                "FromPort": "-1",
+                "ToPort": "-1",
+                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupPrivate" }
+            }        
         }
     },
     "Outputs": {
