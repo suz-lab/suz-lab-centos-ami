@@ -62,28 +62,13 @@
                 "ImageId": {
                     "Ref": "ImageId"
                 }, 			
-                "InstanceType": {
-                    "Ref": "InstanceType"
-                }, 
-                "KeyName": {
-                    "Ref": "KeyName"
-                }, 
+                "InstanceType": { "Ref": "InstanceType" },
+                "KeyName": { "Ref": "KeyName" },
                 "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
                 "SourceDestCheck": "false", 
-                "SubnetId": {
-                    "Ref": "SubnetId"
-                }, 
+                "SubnetId": { "Ref": "SubnetId" },
                 "Tags": [
-                    {
-                        "Key": "Name", 
-                        "Value": {
-                            "Ref": "Name"
-                        }
-                    }, 
-                    {
-                        "Key": "suz-lab:Function", 
-                        "Value": "ondemand-nat"
-                    }
+                    { "Key": "Name", "Value": { "Ref": "Name" } }
                 ]
             }, 
             "Type": "AWS::EC2::Instance"
@@ -91,21 +76,15 @@
         "EC2EIPNat": {
             "Properties": {
                 "Domain": "vpc", 
-                "InstanceId": {
-                    "Ref": "EC2InstanceNat"
-                }
+                "InstanceId": { "Ref": "EC2InstanceNat" }
             }, 
             "Type": "AWS::EC2::EIP"
         }, 
 	"EC2RouteNat": {
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0", 
-                "InstanceId": {
-                    "Ref": "EC2InstanceNat"
-                }, 
-                "RouteTableId": {
-                    "Ref": "RouteTableId"
-                }
+                "InstanceId": { "Ref": "EC2InstanceNat" },
+                "RouteTableId": { "Ref": "RouteTableId" }
             }, 
             "Type": "AWS::EC2::Route"
         }
