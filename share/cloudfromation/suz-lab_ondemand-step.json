@@ -27,7 +27,7 @@
             "Type": "String"
         }, 
         "Name": {
-            "Default": "ondemand-step", 
+            "Default": "od-step", 
             "Description": "Name", 
             "Type": "String"
         }, 

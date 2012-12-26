@@ -127,7 +127,7 @@
             "Type": "String"
         }, 
         "OnDemandStepName": {
-            "Default": "ondemand-step", 
+            "Default": "on-step", 
             "Description": "OnDemand Step Name", 
             "Type": "String"
         },
@@ -142,7 +142,7 @@
             "Type": "String"
         }, 
         "HighAvailabilityNatName": {
-            "Default": "highavailability-nat", 
+            "Default": "ha-nat", 
             "Description": "HighAvailability NAT Name", 
             "Type": "String"
         },
@@ -157,7 +157,7 @@
             "Type": "String"
         }, 
         "OnDemandNatName": {
-            "Default": "ondemand-nat", 
+            "Default": "od-nat", 
             "Description": "OnDemand NAT Name", 
             "Type": "String"
         }
@@ -200,7 +200,7 @@
 	        }
    	    }
         },
-        "CloudFormationStackStep": {
+	"CloudFormationStackOnDemandStep": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL" : "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-step/0.0.2.json",
@@ -217,7 +217,7 @@
                 }
             }
         },
-        "CloudFormationStackHighAvailabilityNat": {
+	"CloudFormationStackHighAvailabilityNat": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-nat/0.0.3.json",
@@ -234,7 +234,7 @@
                     "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicFixA" ] }
                 }
             }
-	},
+        },
 	"CloudFormationStackOnDemandNat": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {

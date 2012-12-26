@@ -27,7 +27,7 @@
             "Type": "String"
         }, 
         "Name": {
-            "Default": "ondemand-nat", 
+            "Default": "od-nat", 
             "Description": "Name", 
             "Type": "String"
         }, 

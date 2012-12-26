@@ -81,7 +81,7 @@
         },
 	"EC2SecurityGroupTmpMaintenance": {
             "Properties": {
-                "GroupDescription": "op-tmp-maintenance", 
+                "GroupDescription": "od-maintenance", 
                 "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
