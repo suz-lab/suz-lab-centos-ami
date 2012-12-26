@@ -79,7 +79,7 @@
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
-	"EC2SecurityGroupTmpMaintenance": {
+	"EC2SecurityGroupMaintenance": {
             "Properties": {
                 "GroupDescription": "od-maintenance", 
                 "VpcId": { "Ref": "VpcId" }
@@ -204,24 +204,24 @@
                 "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupAdmin" }
             }
         },
-	"EC2SecurityGroupIngressNatHttpTmpMaintenance": {
+	"EC2SecurityGroupIngressNatHttpMaintenance": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": { "Ref": "EC2SecurityGroupNat" },
                 "IpProtocol": "6",
                 "FromPort": "80",
                 "ToPort": "80",
-                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" }
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupMaintenance" }
             }
         },
-	"EC2SecurityGroupIngressNatHttpsTmpMaintenance": {
+	"EC2SecurityGroupIngressNatHttpsMaintenance": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": { "Ref": "EC2SecurityGroupNat" },
                 "IpProtocol": "6",
                 "FromPort": "443",
                 "ToPort": "443",
-                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" }
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupMaintenance" }
             }
         },
 	"EC2SecurityGroupIngressNatNtpEc2": {
@@ -354,20 +354,20 @@
                 "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupCacheMemcache" }
             }
         },	
-	"EC2SecurityGroupEgressTmpMaintenanceHttpInternet": {
+	"EC2SecurityGroupEgressMaintenanceHttpInternet": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" },
+                "GroupId": { "Ref": "EC2SecurityGroupMaintenance" },
                 "IpProtocol": "6",
                 "FromPort": "80",
                 "ToPort": "80",
                 "CidrIp": "0.0.0.0/0"
             }
         },
-	"EC2SecurityGroupEgressTmpMaintenanceHttpsInternet": {
+	"EC2SecurityGroupEgressMaintenanceHttpsInternet": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" },
+                "GroupId": { "Ref": "EC2SecurityGroupMaintenance" },
                 "IpProtocol": "6",
                 "FromPort": "443",
                 "ToPort": "443",
