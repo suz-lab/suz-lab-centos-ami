@@ -1,18 +1,17 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation STEP", 
+    "Description": "SUZ-LAB Formation OnDemand Step", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
-                "AZA": "ap-northeast-1a", 
-                "AZB": "ap-northeast-1b", 
-                "AZC": "ap-northeast-1c"
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
             }
         }
     }, 
     "Parameters": {
         "ImageId": {
-	    "AllowedPattern": "^ami-[0-9a-z]{8}",
             "Default": "ami-3417ae35",
             "Description": "Image ID", 
             "Type": "String"
@@ -28,7 +27,7 @@
             "Type": "String"
         }, 
         "Name": {
-            "Default": "step", 
+            "Default": "ondemand-step", 
             "Description": "Name", 
             "Type": "String"
         }, 
@@ -38,46 +37,22 @@
             "Type": "CommaDelimitedList"
         }, 
         "SubnetId": {
-            "AllowedPattern": "^subnet-[0-9a-z]{8}",
             "Default": "subnet-xxxxxxxx", 
             "Description": "Subnet ID", 
-            "Type": "String"
-        }, 
-        "VpcId": {
-            "AllowedPattern": "^vpc-[0-9a-z]{8}",
-            "Default": "vpc-xxxxxxxx", 
-            "Description": "VPC ID", 
             "Type": "String"
         }
     }, 
     "Resources": {
         "EC2InstanceStep": {
             "Properties": {
-                "ImageId": {
-                    "Ref": "ImageId"
-                }, 			
-                "InstanceType": {
-                    "Ref": "InstanceType"
-                }, 
-                "KeyName": {
-                    "Ref": "KeyName"
-                }, 
+                "ImageId": { "Ref": "ImageId" }, 			
+                "InstanceType": { "Ref": "InstanceType" }, 
+                "KeyName": { "Ref": "KeyName" }, 
                 "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
-                "SourceDestCheck": "false", 
-                "SubnetId": {
-                    "Ref": "SubnetId"
-                }, 
+                "SourceDestCheck": "true", 
+                "SubnetId": { "Ref": "SubnetId" }, 
                 "Tags": [
-                    {
-                        "Key": "Name", 
-                        "Value": {
-                            "Ref": "Name"
-                        }
-                    }, 
-                    {
-                        "Key": "suz-lab:Function", 
-                        "Value": "step"
-                    }
+                    { "Key": "Name", "Value": {"Ref": "Name" } } 
                 ]
             }, 
             "Type": "AWS::EC2::Instance"
@@ -85,16 +60,27 @@
         "EC2EIPStep": {
             "Properties": {
                 "Domain": "vpc", 
-                "InstanceId": {
-                    "Ref": "EC2InstanceStep"
-                }
+                "InstanceId": { "Ref": "EC2InstanceStep" }
             }, 
             "Type": "AWS::EC2::EIP"
         }
     },
     "Outputs": {
-        "Guideline": {
-            "Value": "https://docs.google.com/document/pub?id=1f1mnaK6oTb541ZNRceTaw6paLFJT53UzUbv9y1QNFEo"
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_step.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_step.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_step/0.0.2.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         }
     }
 }

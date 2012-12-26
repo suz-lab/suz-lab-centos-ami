@@ -4,15 +4,14 @@
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
-                "AZA": "ap-northeast-1a", 
-                "AZB": "ap-northeast-1b", 
-                "AZC": "ap-northeast-1c"
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
             }
         }
     }, 
     "Parameters": {
         "ImageId": {
-	    "AllowedPattern": "^ami-[0-9a-z]{8}",
             "Default": "ami-14d86d15",
             "Description": "Image ID", 
             "Type": "String"
@@ -33,7 +32,6 @@
             "Type": "String"
         }, 
         "RouteTableId": {
-	    "AllowedPattern": "^rtb-[0-9a-z]{8}",
 	    "Default": "rtb-xxxxxxxx", 
             "Description": "Route Table ID", 
             "Type": "String"
@@ -44,24 +42,15 @@
             "Type": "CommaDelimitedList"
         }, 
         "SubnetId": {
-            "AllowedPattern": "^subnet-[0-9a-z]{8}",
             "Default": "subnet-xxxxxxxx", 
             "Description": "Subnet ID", 
-            "Type": "String"
-        }, 
-        "VpcId": {
-            "AllowedPattern": "^vpc-[0-9a-z]{8}",
-            "Default": "vpc-xxxxxxxx", 
-            "Description": "VPC ID", 
             "Type": "String"
         }
     }, 
     "Resources": {
         "EC2InstanceNat": {
             "Properties": {
-                "ImageId": {
-                    "Ref": "ImageId"
-                }, 			
+                "ImageId": { "Ref": "ImageId" }, 			
                 "InstanceType": { "Ref": "InstanceType" },
                 "KeyName": { "Ref": "KeyName" },
                 "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
@@ -90,8 +79,21 @@
         }
     },
     "Outputs": {
-        "Guideline": {
-            "Value": "https://docs.google.com/document/pub?id=1f1mnaK6oTb541ZNRceTaw6paLFJT53UzUbv9y1QNFEo"
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_ondemand-nat.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_ondemand-nat.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-nat/0.0.3.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         }
     }
 }

@@ -4,49 +4,25 @@
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
-                "AZA": "ap-northeast-1a", 
-                "AZB": "ap-northeast-1b", 
-                "AZC": "ap-northeast-1c"
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
             }
         }
     }, 
     "Parameters": {
-        "VpcCidrIp": {
-            "Default": "10.0.0.0/16",
-            "Description": "VPC CIDR IP", 
-            "Type": "String"
-        },
 	"VpcId": {
             "Default": "vpc-xxxxxxxx",
             "Description": "VPC ID", 
             "Type": "String"
         },
-        "SourceName": {
-            "Default": "suzlab",
-            "Description": "Source Name", 
-            "Type": "String"
-        },
 	"SourceCidrIp": {
-            "Default": "0.0.0.0/0",
+            "Default": "192.0.2.0/24",
             "Description": "Source CIDR IP", 
             "Type": "String"
         } 
     }, 
     "Resources": {
-	"EC2SecurityGroupStepSource": {
-            "Properties": {
-                "GroupDescription": { "Fn::Join": [ "-", [ "op-step", { "Ref": "SourceName" } ] ] },
-                "VpcId": { "Ref": "VpcId" }
-            }, 
-            "Type": "AWS::EC2::SecurityGroup"
-        },
-	"EC2SecurityGroupAdminSource": {
-            "Properties": {
-                "GroupDescription": { "Fn::Join": [ "-", [ "op-admin", { "Ref": "SourceName" } ] ] },
-                "VpcId": { "Ref": "VpcId" }
-            }, 
-            "Type": "AWS::EC2::SecurityGroup"
-        },
 	"EC2SecurityGroupStep": {
             "Properties": {
                 "GroupDescription": "op-step", 
@@ -89,16 +65,23 @@
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
-	"EC2SecurityGroupDbOracle": {
+        "EC2SecurityGroupDbOracle": {
             "Properties": {
                 "GroupDescription": "op-db-oracle", 
                 "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
         },
-	"EC2SecurityGroupMaintenance": {
+        "EC2SecurityGroupCacheMemcache": {
             "Properties": {
-                "GroupDescription": "op-maintenance", 
+                "GroupDescription": "op-cache-memcache", 
+                "VpcId": { "Ref": "VpcId" }
+            }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+	"EC2SecurityGroupTmpMaintenance": {
+            "Properties": {
+                "GroupDescription": "op-tmp-maintenance", 
                 "VpcId": { "Ref": "VpcId" }
             }, 
             "Type": "AWS::EC2::SecurityGroup"
@@ -131,46 +114,16 @@
             },
             "Type": "AWS::EC2::SecurityGroup"
         },
-	"EC2SecurityGroupIngressStepSourceSshSource": {
+	"EC2SecurityGroupIngressStepSshSource": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupStepSource" },
+                "GroupId": { "Ref": "EC2SecurityGroupStep" },
                 "IpProtocol": "6",
                 "FromPort": "22",
                 "ToPort": "22",
 		"CidrIp": { "Ref": "SourceCidrIp" }
             }
 	},
-	"EC2SecurityGroupEgressStepSourceSshStepSource": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupStepSource" },
-                "IpProtocol": "6",
-                "FromPort": "22",
-                "ToPort": "22",
-                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupStepSource" }
-            }
-        },
-	"EC2SecurityGroupIngressAdminSourceHttpsSource": {
-            "Type": "AWS::EC2::SecurityGroupIngress",
-            "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupAdminSource" },
-                "IpProtocol": "6",
-                "FromPort": "443",
-                "ToPort": "443",
-		"CidrIp": { "Ref": "SourceCidrIp" }
-            }
-	},
-	"EC2SecurityGroupEgressAdminSourceHttpsAdminSource": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupAdminSource" },
-                "IpProtocol": "6",
-                "FromPort": "443",
-                "ToPort": "443",
-                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupAdminSource" }
-            }
-        },
 	"EC2SecurityGroupEgressStepSshEc2": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
@@ -231,16 +184,16 @@
                 "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupAdmin" }
             }
         },
-	"EC2SecurityGroupEgressEc2DnsVpc": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
+	"EC2SecurityGroupIngressAdminLbHttpsSource": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupEc2" },
-                "IpProtocol": "17",
-                "FromPort": "53",
-                "ToPort": "53",
-                "CidrIp": { "Ref": "VpcCidrIp" }
+                "GroupId": { "Ref": "EC2SecurityGroupAdminLb" },
+                "IpProtocol": "6",
+                "FromPort": "443",
+                "ToPort": "443",
+		"CidrIp": { "Ref": "SourceCidrIp" }
             }
-        },
+	},
 	"EC2SecurityGroupEgressAdminLbHttpAdmin": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
@@ -251,24 +204,24 @@
                 "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupAdmin" }
             }
         },
-	"EC2SecurityGroupIngressNatHttpMaintenance": {
+	"EC2SecurityGroupIngressNatHttpTmpMaintenance": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": { "Ref": "EC2SecurityGroupNat" },
                 "IpProtocol": "6",
                 "FromPort": "80",
                 "ToPort": "80",
-                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupMaintenance" }
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" }
             }
         },
-	"EC2SecurityGroupIngressNatHttpsMaintenance": {
+	"EC2SecurityGroupIngressNatHttpsTmpMaintenance": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": { "Ref": "EC2SecurityGroupNat" },
                 "IpProtocol": "6",
                 "FromPort": "443",
                 "ToPort": "443",
-                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupMaintenance" }
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" }
             }
         },
 	"EC2SecurityGroupIngressNatNtpEc2": {
@@ -381,20 +334,40 @@
                 "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupDbOracle" }
             }
         },	
-	"EC2SecurityGroupEgressMaintenanceHttpInternet": {
+	"EC2SecurityGroupIngressCacheMemcacheMemcacheAdmin": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupCacheMemcache" },
+                "IpProtocol": "6",
+                "FromPort": "11211",
+                "ToPort": "11211",
+                "SourceSecurityGroupId": { "Ref": "EC2SecurityGroupAdmin" }
+            }
+        },
+	"EC2SecurityGroupEgressCacheMemcacheMemcacheCacheMemcache": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupMaintenance" },
+                "GroupId": { "Ref": "EC2SecurityGroupCacheMemcache" },
+                "IpProtocol": "6",
+                "FromPort": "11211",
+                "ToPort": "11211",
+                "DestinationSecurityGroupId": { "Ref": "EC2SecurityGroupCacheMemcache" }
+            }
+        },	
+	"EC2SecurityGroupEgressTmpMaintenanceHttpInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" },
                 "IpProtocol": "6",
                 "FromPort": "80",
                 "ToPort": "80",
                 "CidrIp": "0.0.0.0/0"
             }
         },
-	"EC2SecurityGroupEgressMaintenanceHttpsInternet": {
+	"EC2SecurityGroupEgressTmpMaintenanceHttpsInternet": {
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId": { "Ref": "EC2SecurityGroupMaintenance" },
+                "GroupId": { "Ref": "EC2SecurityGroupTmpMaintenance" },
                 "IpProtocol": "6",
                 "FromPort": "443",
                 "ToPort": "443",
@@ -483,20 +456,33 @@
         }
     },
     "Outputs": {
-        "Guideline": {
-            "Value": "https://docs.google.com/document/pub?id=1f1mnaK6oTb541ZNRceTaw6paLFJT53UzUbv9y1QNFEo"
-        },
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_operational-firewall/0.0.4.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        }, 
 	"SecurityGroupIdEc2": {
-            "Value": { "Ref": "EC2SecurityGroupEc2" }
-        },
-	"SecurityGroupIdStepSource": {
-            "Value": { "Ref": "EC2SecurityGroupStepSource" }
+            "Description": "Security Group ID EC2",
+	    "Value": { "Ref": "EC2SecurityGroupEc2" }
         },
 	"SecurityGroupIdStep": {
-            "Value": { "Ref": "EC2SecurityGroupStep" }
+            "Description": "Security Group ID STEP",
+	    "Value": { "Ref": "EC2SecurityGroupStep" }
         },
 	"SecurityGroupIdNat": {
-            "Value": { "Ref": "EC2SecurityGroupNat" }
+            "Description": "Security Group ID NAT",
+	    "Value": { "Ref": "EC2SecurityGroupNat" }
         }
     }
 }

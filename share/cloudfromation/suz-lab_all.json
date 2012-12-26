@@ -1,29 +1,113 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation ALL", 
+    "Description": "SUZ-LAB Formation All", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
-                "AZA": "ap-northeast-1a", 
-                "AZB": "ap-northeast-1b", 
-                "AZC": "ap-northeast-1c"
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
             }
         }
     }, 
     "Parameters": {
-	"VpcCidrIp": {
-            "AllowedPattern": "^(\\d|[01]?\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[01]?\\d\\d|2[0-4]\\d|25[0-5])", 
-            "Default": "10.0", 
-            "Description": "VPC CIDR IP (X.X.0.0/16)", 
+        "VpcCidrIp": {
+            "Default": "10.0.0.0/16", 
+            "Description": "VPC CIDR IP", 
             "Type": "String"
         },
-	"SourceName": {
-            "Default": "suzlab", 
-            "Description": "Source Name", 
+        "SubnetPublicVarACidrIp": {
+            "Default": "10.0.0.0/24", 
+            "Description": "Subnet Public Var A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPublicVarBCidrIp": {
+            "Default": "10.0.1.0/24", 
+            "Description": "Subnet Public Var B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPublicVarCCidrIp": {
+            "Default": "10.0.2.0/24", 
+            "Description": "Subnet Public Var C CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPublicFixACidrIp": {
+            "Default": "10.0.8.0/24", 
+            "Description": "Subnet Public Fix A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPublicFixBCidrIp": {
+            "Default": "10.0.9.0/24", 
+            "Description": "Subnet Public Fix B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPublicFixCCidrIp": {
+            "Default": "10.0.10.0/24", 
+            "Description": "Subnet Public Fix C CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedVarACidrIp": {
+            "Default": "10.0.32.0/24", 
+            "Description": "Subnet Protected Var A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedVarBCidrIp": {
+            "Default": "10.0.33.0/24", 
+            "Description": "Subnet Protected Var B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedVarCCidrIp": {
+            "Default": "10.0.34.0/24", 
+            "Description": "Subnet Protected Var C CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedFixACidrIp": {
+            "Default": "10.0.40.0/24", 
+            "Description": "Subnet Protected Fix A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedFixBCidrIp": {
+            "Default": "10.0.41.0/24", 
+            "Description": "Subnet Protected Fix B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetProtectedFixCCidrIp": {
+            "Default": "10.0.42.0/24", 
+            "Description": "Subnet Protected Fix C CIDR IP", 
+            "Type": "String"
+        },	
+        "SubnetPrivateVarACidrIp": {
+            "Default": "10.0.64.0/24", 
+            "Description": "Subnet Private Var A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPrivateVarBCidrIp": {
+            "Default": "10.0.65.0/24", 
+            "Description": "Subnet Private Var B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPrivateVarCCidrIp": {
+            "Default": "10.0.66.0/24", 
+            "Description": "Subnet Private Var C CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPrivateFixACidrIp": {
+            "Default": "10.0.72.0/24", 
+            "Description": "Subnet Private Fix A CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPrivateFixBCidrIp": {
+            "Default": "10.0.73.0/24", 
+            "Description": "Subnet Private Fix B CIDR IP", 
+            "Type": "String"
+        },
+        "SubnetPrivateFixCCidrIp": {
+            "Default": "10.0.74.0/24", 
+            "Description": "Subnet Private Fix C CIDR IP", 
             "Type": "String"
         },
 	"SourceCidrIp": {
-            "Default": "0.0.0.0/0", 
+            "Default": "192.0.2.0/24",
             "Description": "Source CIDR IP", 
             "Type": "String"
         },
@@ -32,24 +116,37 @@
             "Description": "Key Name", 
             "Type": "String"
         }, 
-        "StepImageId": {
-	    "AllowedPattern": "^ami-[0-9a-z]{8}",
+        "OnDemandStepImageId": {
             "Default": "ami-3417ae35",
-            "Description": "Step Image ID", 
+            "Description": "OnDemand Step Image ID", 
             "Type": "String"
         }, 
-        "StepInstanceType": {
+        "OnDemandStepInstanceType": {
             "Default": "t1.micro", 
-            "Description": "Step Instance Type", 
+            "Description": "OnDemand Step Instance Type", 
             "Type": "String"
         }, 
-        "StepName": {
-            "Default": "step", 
-            "Description": "Step Name", 
+        "OnDemandStepName": {
+            "Default": "ondemand-step", 
+            "Description": "OnDemand Step Name", 
+            "Type": "String"
+        },
+	"HighAvailabilityNatImageId": {
+            "Default": "ami-14d86d15",
+            "Description": "HighAvailability NAT Image ID", 
+            "Type": "String"
+        }, 
+        "HighAvailabilityNatInstanceType": {
+            "Default": "t1.micro", 
+            "Description": "HighAvailability NAT Instance Type", 
+            "Type": "String"
+        }, 
+        "HighAvailabilityNatName": {
+            "Default": "highavailability-nat", 
+            "Description": "HighAvailability NAT Name", 
             "Type": "String"
         },
 	"OnDemandNatImageId": {
-	    "AllowedPattern": "^ami-[0-9a-z]{8}",
             "Default": "ami-14d86d15",
             "Description": "OnDemand NAT Image ID", 
             "Type": "String"
@@ -66,78 +163,113 @@
         }
     }, 
     "Resources": {
-        "CloudFormationStackVpcBasic" : {
+        "CloudFormationStackVpcBase": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_vpc-basic-0.0.2.json",
-	        "Parameters" : {
-		    "VpcCidrIp": { "Ref" : "VpcCidrIp" }
+	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_vpc-base/0.0.4.json",
+	        "Parameters": {
+		    "VpcCidrIp": { "Ref" : "VpcCidrIp" },
+		    "SubnetPublicVarACidrIp": { "Ref" : "SubnetPublicVarACidrIp" },
+                    "SubnetPublicVarBCidrIp": { "Ref" : "SubnetPublicVarBCidrIp" },
+                    "SubnetPublicVarCCidrIp": { "Ref" : "SubnetPublicVarCCidrIp" },
+                    "SubnetPublicFixACidrIp": { "Ref" : "SubnetPublicFixACidrIp" },
+                    "SubnetPublicFixBCidrIp": { "Ref" : "SubnetPublicFixBCidrIp" },
+                    "SubnetPublicFixCCidrIp": { "Ref" : "SubnetPublicFixCCidrIp" },
+                    "SubnetProtectedVarACidrIp": { "Ref" : "SubnetProtectedVarACidrIp" },
+                    "SubnetProtectedVarBCidrIp": { "Ref" : "SubnetProtectedVarBCidrIp" },
+                    "SubnetProtectedVarCCidrIp": { "Ref" : "SubnetProtectedVarCCidrIp" },
+                    "SubnetProtectedFixACidrIp": { "Ref" : "SubnetProtectedFixACidrIp" },
+                    "SubnetProtectedFixBCidrIp": { "Ref" : "SubnetProtectedFixBCidrIp" },
+                    "SubnetProtectedFixCCidrIp": { "Ref" : "SubnetProtectedFixCCidrIp" },
+                    "SubnetPrivateVarACidrIp": { "Ref" : "SubnetPrivateVarACidrIp" },
+                    "SubnetPrivateVarBCidrIp": { "Ref" : "SubnetPrivateVarBCidrIp" },
+                    "SubnetPrivateVarCCidrIp": { "Ref" : "SubnetPrivateVarCCidrIp" },
+                    "SubnetPrivateFixACidrIp": { "Ref" : "SubnetPrivateFixACidrIp" },
+                    "SubnetPrivateFixBCidrIp": { "Ref" : "SubnetPrivateFixBCidrIp" },
+                    "SubnetPrivateFixCCidrIp": { "Ref" : "SubnetPrivateFixCCidrIp" }
 		}
 	    } 
 	},
-	"CloudFormationStackOperationalFirewall" : {
+	"CloudFormationStackOperationalFirewall": {
   	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL" : "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_operational-firewall-0.0.2.json",
-	        "Parameters" : {
-	            "VpcCidrIp": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcCidrIpBasic" ] },
-		    "VpcId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcIdBasic" ] },
-		    "SourceName": { "Ref" : "SourceName" },
-		    "SourceCidrIp": { "Ref" : "SourceCidrIp" }
+	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_operational-firewall/0.0.4.json",
+	        "Parameters": {
+		    "VpcId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.VpcIdBase" ] },
+		    "SourceCidrIp": { "Ref": "SourceCidrIp" }
 	        }
    	    }
         },
-	"CloudFormationStackStep" : {
-  	    "Type": "AWS::CloudFormation::Stack",
-	    "Properties": {
-	        "TemplateURL" : "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_step-0.0.1.json",
-	        "Parameters" : {
-	            "KeyName": { "Ref": "KeyName" },
-                    "ImageId": { "Ref": "StepImageId" }, 
-	            "InstanceType": { "Ref": "StepInstanceType" },
-	            "Name": { "Ref": "StepName" },
-	            "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-		        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStepSource" ] },
-			{ "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStep" ] },
-                        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
-		    ] ] },
-	            "SubnetId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.SubnetIdPublicVarA00" ] },
-	            "VpcId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcIdBasic" ] }
-	        }
-   	    }
+        "CloudFormationStackStep": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL" : "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-step/0.0.2.json",
+                "Parameters" : {
+                    "KeyName": { "Ref": "KeyName" },
+                    "ImageId": { "Ref": "OnDemandStepImageId" }, 
+                    "InstanceType": { "Ref": "OnDemandStepInstanceType" },
+                    "Name": { "Ref": "OnDemandStepName" },
+                    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStep" ] },
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
+                    ] ] },
+                    "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicVarA" ] }
+                }
+            }
         },
-	"CloudFormationStackOnDemandNat" : {
-  	    "Type": "AWS::CloudFormation::Stack",
-	    "Properties": {
-	        "TemplateURL" : "https://s3-ap-northeast-1.amazonaws.com/template.suz-lab.com/template/suz-lab_ondemand-nat-0.0.2.json",
-	        "Parameters" : {
-	            "KeyName": { "Ref": "KeyName" },
+        "CloudFormationStackHighAvailabilityNat": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-nat/0.0.3.json",
+                "Parameters": {
+                    "KeyName": { "Ref": "KeyName" },
+                    "ImageId": { "Ref": "HighAvailabilityNatImageId" }, 
+                    "InstanceType": { "Ref": "HighAvailabilityNatInstanceType" },
+                    "Name": { "Ref": "HighAvailabilityNatName" },
+                    "RouteTableId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBase", "Outputs.RouteTableIdProtected" ] },
+                    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
+                    ] ] },
+                    "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicFixA" ] }
+                }
+            }
+	},
+	"CloudFormationStackOnDemandNat": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-nat/0.0.3.json",
+                "Parameters": {
+                    "KeyName": { "Ref": "KeyName" },
                     "ImageId": { "Ref": "OnDemandNatImageId" }, 
-	            "InstanceType": { "Ref": "OnDemandNatInstanceType" },
-	            "Name": { "Ref": "OnDemandNatName" },
-	            "RouteTableId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.RouteTableIdProtected" ] },
-	            "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-		        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
-                        { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
-		    ] ] },
-	            "SubnetId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.SubnetIdPublicVarA00" ] },
-	            "VpcId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.VpcIdBasic" ] }
-	        }
-   	    }
+                    "InstanceType": { "Ref": "OnDemandNatInstanceType" },
+                    "Name": { "Ref": "OnDemandNatName" },
+                    "RouteTableId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBase", "Outputs.RouteTableIdPrivate" ] },
+                    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
+                        { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
+                    ] ] },
+                    "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicVarA" ] }
+                }
+            }
         }
     },
     "Outputs": {
-        "GuidelineVpcBasic": {
-            "Value": { "Fn::GetAtt" : [ "CloudFormationStackVpcBasic", "Outputs.Guideline" ] }
-        },
-	"GuidelineOperationalFirewall": {
-            "Value": { "Fn::GetAtt" : [ "CloudFormationStackOperationalFirewall", "Outputs.Guideline" ] }
-        },
-	"GuidelineOperationalStep": {
-            "Value": { "Fn::GetAtt" : [ "CloudFormationStackStep", "Outputs.Guideline" ] }
-        },
-	"GuidelineOperationalOnDemandNat": {
-            "Value": { "Fn::GetAtt" : [ "CloudFormationStackOnDemandNat", "Outputs.Guideline" ] }
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_all.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_all.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_all/0.0.2.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         }
     } 
 }
