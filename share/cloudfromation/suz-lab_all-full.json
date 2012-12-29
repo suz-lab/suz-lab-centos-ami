@@ -160,10 +160,24 @@
             "Default": "od-nat", 
             "Description": "OnDemand NAT Name", 
             "Type": "String"
+        },
+        "PowerUserName": {
+            "Default": "power-user", 
+            "Description": "Power User Name", 
+            "Type": "String"
         }
     }, 
     "Resources": {
-        "CloudFormationStackVpcBase": {
+	"CloudFormationStackIamBase": {
+  	    "Type": "AWS::CloudFormation::Stack",
+	    "Properties": {
+	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_iam-base/0.0.1.json",
+	        "Parameters": {
+		    "PowerUserName": { "Ref" : "PowerUserName" } 
+	        }
+   	    }
+        },
+	"CloudFormationStackVpcBase": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
 	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_vpc-base/0.0.4.json",

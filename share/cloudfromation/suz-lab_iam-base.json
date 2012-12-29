@@ -69,6 +69,10 @@
 	"CacooImage": {
             "Description": "Cacoo Image",
             "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        },
+	"IAMInstanceProfilePowerUser": {
+            "Description": "IAM Instance Profile Power User",
+            "Value": { "Ref": "IAMInstanceProfilePowerUser" }
         }
     } 
 }

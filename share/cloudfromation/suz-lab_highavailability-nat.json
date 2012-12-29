@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation OnDemand Step", 
+    "Description": "SUZ-LAB Formation OnDemand NAT", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -12,7 +12,7 @@
     }, 
     "Parameters": {
         "ImageId": {
-            "Default": "ami-3417ae35",
+            "Default": "ami-14d86d15",
             "Description": "Image ID", 
             "Type": "String"
         }, 
@@ -27,62 +27,69 @@
             "Type": "String"
         }, 
         "Name": {
-            "Default": "od-step", 
+            "Default": "od-nat", 
             "Description": "Name", 
+            "Type": "String"
+        }, 
+        "RouteTableId": {
+	    "Default": "rtb-xxxxxxxx", 
+            "Description": "Route Table ID", 
             "Type": "String"
         }, 
         "SecurityGroupIds": {
             "Default": "sg-xxxxxxxx, sg-yyyyyyyy", 
             "Description": "Security Group IDs", 
             "Type": "CommaDelimitedList"
-        },
+        }, 
         "SubnetId": {
             "Default": "subnet-xxxxxxxx", 
             "Description": "Subnet ID", 
             "Type": "String"
-        },
-	"IamInstanceProfile": {
-            "Default": "xxx", 
-            "Description": "IAM Instance Profile", 
-            "Type": "String"
         }
     }, 
     "Resources": {
-        "EC2InstanceStep": {
+        "EC2InstanceNat": {
             "Properties": {
                 "ImageId": { "Ref": "ImageId" }, 			
-                "InstanceType": { "Ref": "InstanceType" }, 
-                "KeyName": { "Ref": "KeyName" }, 
+                "InstanceType": { "Ref": "InstanceType" },
+                "KeyName": { "Ref": "KeyName" },
                 "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
-                "SourceDestCheck": "true", 
-                "SubnetId": { "Ref": "SubnetId" }, 
-		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
+                "SourceDestCheck": "false", 
+                "SubnetId": { "Ref": "SubnetId" },
                 "Tags": [
-                    { "Key": "Name", "Value": {"Ref": "Name" } } 
+                    { "Key": "Name", "Value": { "Ref": "Name" } }
                 ]
             }, 
             "Type": "AWS::EC2::Instance"
         }, 
-        "EC2EIPStep": {
+        "EC2EIPNat": {
             "Properties": {
                 "Domain": "vpc", 
-                "InstanceId": { "Ref": "EC2InstanceStep" }
+                "InstanceId": { "Ref": "EC2InstanceNat" }
             }, 
             "Type": "AWS::EC2::EIP"
+        }, 
+	"EC2RouteNat": {
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0", 
+                "InstanceId": { "Ref": "EC2InstanceNat" },
+                "RouteTableId": { "Ref": "RouteTableId" }
+            }, 
+            "Type": "AWS::EC2::Route"
         }
     },
     "Outputs": {
         "GithubMarkdown": {
             "Description": "Github Markdown",
-            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_step.md"
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_ondemand-nat.md"
         }, 
         "GithubJson": {
             "Description": "Github JSON",
-            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_step.json"
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_ondemand-nat.json"
         }, 
         "S3JsonApNortheast1": {
             "Description": "S3 JSON ap-northeast-1",
-            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_step/0.0.2.json"
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_ondemand-nat/0.0.3.json"
         }, 
 	"CacooImage": {
             "Description": "Cacoo Image",

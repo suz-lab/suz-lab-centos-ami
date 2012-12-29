@@ -159,8 +159,9 @@
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
                     ] ] },
+                    "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicVarA" ] },
                     "SubnetId": { "Fn::GetAtt": [ "CloudFormationStackVpcBase", "Outputs.SubnetIdPublicVarA" ] }
-                }
+		}
             }
         }
     },
