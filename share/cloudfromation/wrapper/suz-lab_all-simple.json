@@ -129,7 +129,7 @@
         }, 
         "S3JsonApNortheast1": {
             "Description": "S3 JSON ap-northeast-1",
-            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_all/0.0.2.json"
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/wrapper/suz-lab_all/0.0.2.json"
         }, 
 	"CacooImage": {
             "Description": "Cacoo Image",
