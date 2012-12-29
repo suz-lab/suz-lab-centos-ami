@@ -1,0 +1,140 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09", 
+    "Description": "SUZ-LAB Formation All Simple", 
+    "Mappings": {
+        "AvailabilityZoneMap": {
+            "ap-northeast-1": {
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
+            }
+        }
+    }, 
+    "Parameters": {
+        "VpcCidrIpFirst2Octets": {
+            "Default": "10.0", 
+            "Description": "VPC CIDR IP First 2 Octets", 
+            "Type": "String"
+        },
+	"SourceCidrIp": {
+            "Default": "192.0.2.0/24",
+            "Description": "Source CIDR IP", 
+            "Type": "String"
+        },
+	"KeyName": {
+            "Default": "", 
+            "Description": "Key Name", 
+            "Type": "String"
+        }, 
+        "OnDemandStepImageId": {
+            "Default": "ami-3417ae35",
+            "Description": "OnDemand Step Image ID", 
+            "Type": "String"
+        }, 
+        "OnDemandStepInstanceType": {
+            "Default": "t1.micro", 
+            "Description": "OnDemand Step Instance Type", 
+            "Type": "String"
+        }, 
+        "OnDemandStepName": {
+            "Default": "on-step", 
+            "Description": "OnDemand Step Name", 
+            "Type": "String"
+        },
+	"HighAvailabilityNatImageId": {
+            "Default": "ami-14d86d15",
+            "Description": "HighAvailability NAT Image ID", 
+            "Type": "String"
+        }, 
+        "HighAvailabilityNatInstanceType": {
+            "Default": "t1.micro", 
+            "Description": "HighAvailability NAT Instance Type", 
+            "Type": "String"
+        }, 
+        "HighAvailabilityNatName": {
+            "Default": "ha-nat", 
+            "Description": "HighAvailability NAT Name", 
+            "Type": "String"
+        },
+	"OnDemandNatImageId": {
+            "Default": "ami-14d86d15",
+            "Description": "OnDemand NAT Image ID", 
+            "Type": "String"
+        }, 
+        "OnDemandNatInstanceType": {
+            "Default": "t1.micro", 
+            "Description": "OnDemand NAT Instance Type", 
+            "Type": "String"
+        }, 
+        "OnDemandNatName": {
+            "Default": "od-nat", 
+            "Description": "OnDemand NAT Name", 
+            "Type": "String"
+        },
+        "PowerUserName": {
+            "Default": "power-user", 
+            "Description": "Power User Name", 
+            "Type": "String"
+        }
+    }, 
+    "Resources": {
+        "CloudFormationStackAllFull": {
+	    "Type": "AWS::CloudFormation::Stack",
+	    "Properties": {
+	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/integrator/suz-lab_all/0.0.4.json",
+	        "Parameters": {
+                    "VpcCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16" ] ] },
+                    "SubnetPublicVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24" ] ] },
+                    "SubnetPublicVarBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".1.0/24" ] ] },
+                    "SubnetPublicVarCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".2.0/24" ] ] },
+                    "SubnetPublicFixACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".8.0/24" ] ] },
+                    "SubnetPublicFixBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".9.0/24" ] ] },
+                    "SubnetPublicFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".10.0/24" ] ] },
+                    "SubnetProtectedVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".32.0/24" ] ] },
+                    "SubnetProtectedVarBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".33.0/24" ] ] },
+                    "SubnetProtectedVarCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".34.0/24" ] ] },
+                    "SubnetProtectedFixACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.0/24" ] ] },
+                    "SubnetProtectedFixBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".41.0/24" ] ] },
+                    "SubnetProtectedFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".42.0/24" ] ] },
+                    "SubnetPrivateVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".64.0/24" ] ] },
+                    "SubnetPrivateVarBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".65.0/24" ] ] },
+                    "SubnetPrivateVarCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".66.0/24" ] ] },
+                    "SubnetPrivateFixACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".72.0/24" ] ] },
+                    "SubnetPrivateFixBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".73.0/24" ] ] },
+                    "SubnetPrivateFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] }, 
+                    "SourceCidrIp": { "Ref": "SourceCidrIp" },
+                    "KeyName": { "Ref": "KeyName" },
+                    "OnDemandStepImageId": { "Ref": "OnDemandStepImageId" },
+                    "OnDemandStepInstanceType": { "Ref": "OnDemandStepInstanceType" },
+                    "OnDemandStepName": { "Ref": "OnDemandStepName" },
+	            "HighAvailabilityNatImageId": { "Ref": "HighAvailabilityNatImageId" },
+                    "HighAvailabilityNatInstanceType": { "Ref": "HighAvailabilityNatInstanceType" },
+                    "HighAvailabilityNatName": { "Ref": "HighAvailabilityNatName" },
+	            "OnDemandNatImageId": { "Ref": "OnDemandNatImageId" },
+                    "OnDemandNatInstanceType": { "Ref": "OnDemandNatInstanceType" },
+                    "OnDemandNatName": { "Ref": "OnDemandNatName" },
+                    "PowerUserName": { "Ref": "PowerUserName" }
+		}
+	    } 
+	}
+    },
+    "Outputs": {
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_all.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_all.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_all/0.0.2.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        }
+    } 
+}
+
