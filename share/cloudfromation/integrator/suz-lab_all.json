@@ -171,7 +171,7 @@
 	"CloudFormationStackIamBase": {
   	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_iam-base/0.0.1.json",
+	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/resource/suz-lab_iam-base/0.0.1.json",
 	        "Parameters": {
 		    "PowerUserName": { "Ref" : "PowerUserName" } 
 	        }
