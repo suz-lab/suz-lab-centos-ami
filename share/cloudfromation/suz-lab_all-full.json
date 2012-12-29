@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation All", 
+    "Description": "SUZ-LAB Formation All Full", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -223,6 +223,7 @@
                     "ImageId": { "Ref": "OnDemandStepImageId" }, 
                     "InstanceType": { "Ref": "OnDemandStepInstanceType" },
                     "Name": { "Ref": "OnDemandStepName" },
+		    "IamInstanceProfile": { "Fn::GetAtt": [ "CloudFormationStackIamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
                     "SecurityGroupIds": { "Fn::Join": [ ",", [ 
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdStep" ] },
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
@@ -241,7 +242,8 @@
                     "InstanceType": { "Ref": "HighAvailabilityNatInstanceType" },
                     "Name": { "Ref": "HighAvailabilityNatName" },
                     "RouteTableId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBase", "Outputs.RouteTableIdProtected" ] },
-                    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
+		    "IamInstanceProfile": { "Fn::GetAtt": [ "CloudFormationStackIamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
+		    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }
                     ] ] },
@@ -259,6 +261,7 @@
                     "InstanceType": { "Ref": "OnDemandNatInstanceType" },
                     "Name": { "Ref": "OnDemandNatName" },
                     "RouteTableId": { "Fn::GetAtt" : [ "CloudFormationStackVpcBase", "Outputs.RouteTableIdPrivate" ] },
+		    "IamInstanceProfile": { "Fn::GetAtt": [ "CloudFormationStackIamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
                     "SecurityGroupIds": { "Fn::Join": [ ",", [ 
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdNat" ] },
                         { "Fn::GetAtt": [ "CloudFormationStackOperationalFirewall", "Outputs.SecurityGroupIdEc2" ] }

@@ -42,7 +42,6 @@
             "Type": "String"
         },
 	"IamInstanceProfile": {
-            "Default": "xxx", 
             "Description": "IAM Instance Profile", 
             "Type": "String"
         }

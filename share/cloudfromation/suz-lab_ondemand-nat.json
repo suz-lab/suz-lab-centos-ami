@@ -45,6 +45,10 @@
             "Default": "subnet-xxxxxxxx", 
             "Description": "Subnet ID", 
             "Type": "String"
+        },
+	"IamInstanceProfile": {
+            "Description": "IAM Instance Profile", 
+            "Type": "String"
         }
     }, 
     "Resources": {
@@ -56,6 +60,7 @@
                 "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
                 "SourceDestCheck": "false", 
                 "SubnetId": { "Ref": "SubnetId" },
+		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
                 "Tags": [
                     { "Key": "Name", "Value": { "Ref": "Name" } }
                 ]
