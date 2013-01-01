@@ -1,2 +1,2 @@
-suz-lab-centos-ami
+suz-lab-centos-ami/share/README.md
 ==================
