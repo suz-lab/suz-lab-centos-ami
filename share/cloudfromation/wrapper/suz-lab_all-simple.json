@@ -22,7 +22,7 @@
             "Type": "String"
         },
 	"KeyName": {
-            "Default": "", 
+            "Default": "aws_ap-northeast-1", 
             "Description": "Key Name", 
             "Type": "String"
         }, 
@@ -37,7 +37,7 @@
             "Type": "String"
         }, 
         "OnDemandStepName": {
-            "Default": "on-step", 
+            "Default": "od-step", 
             "Description": "OnDemand Step Name", 
             "Type": "String"
         },

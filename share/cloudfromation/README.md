@@ -1,4 +1,4 @@
-suz-lab-centos-ami/share/ cloudfromation/
+suz-lab-centos-ami/share/cloudfromation/
 ========
 
 いろいろCloudFormationのテンプレートを作ってきたけど、

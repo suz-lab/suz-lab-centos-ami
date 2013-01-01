@@ -22,7 +22,7 @@
             "Type": "String"
         }, 
         "KeyName": {
-            "Default": "", 
+            "Default": "aws_ap-northeast-1", 
             "Description": "Key Name", 
             "Type": "String"
         }, 
