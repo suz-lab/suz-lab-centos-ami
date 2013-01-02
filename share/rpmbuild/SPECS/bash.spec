@@ -5,7 +5,7 @@
 Version: %{baseversion}%{patchlevel}
 Name: bash
 Summary: The GNU Bourne Again shell
-Release: 9%{?dist}
+Release: 9%{?dist}_2.suzlab_1
 Group: System Environment/Shells
 License: GPLv3+
 Url: http://www.gnu.org/software/bash
@@ -129,7 +129,7 @@ autoconf
 
 # For -fwrapv option see https://www.securecoding.cert.org/confluence/display/seccode/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
 # Bash needs to be fixed.
-make "CFLAGS=$CFLAGS -fwrapv" "CPPFLAGS=-D_GNU_SOURCE -DRECYCLES_PIDS `getconf LFS_CFLAGS`"
+make "CFLAGS=$CFLAGS -fwrapv" "CPPFLAGS=-D_GNU_SOURCE -DRECYCLES_PIDS `getconf LFS_CFLAGS` -DSYSLOG_HISTORY"
 %check
 make check
 
