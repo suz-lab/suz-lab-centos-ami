@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+trap 'echo "NG: $?"' ERR
+yum clean all
+rm -f /etc/ssh/ssh_host_*
+echo "127.0.0.1       localhost.localdomain localhost" > /etc/hosts
+cd /var/lib/cloud
+rm -rf data handlers instance instances seed sem
+cd /var/log
+ls -F | grep -v / | xargs -L1 cp /dev/null
+cp /dev/null /var/log/audit/audit.log 
+cp /dev/null /root/.ssh/authorized_keys 
+cp /dev/null /root/.bash_history 
+history -c
+exit 0
