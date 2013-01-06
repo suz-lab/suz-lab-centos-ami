@@ -11,5 +11,6 @@ ls -F | grep -v / | xargs -L1 cp /dev/null
 cp /dev/null /var/log/audit/audit.log 
 cp /dev/null /root/.ssh/authorized_keys 
 cp /dev/null /root/.bash_history 
+cp /dev/null /opt/suz-lab/var/log/syslog/all.log
 history -c
 exit 0
