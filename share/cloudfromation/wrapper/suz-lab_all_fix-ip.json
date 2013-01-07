@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation All Simple", 
+    "Description": "SUZ-LAB Formation All Fix IP", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -26,49 +26,54 @@
             "Description": "Key Name", 
             "Type": "String"
         }, 
-        "OnDemandStepImageId": {
-            "Default": "ami-3417ae35",
+        "OpFwType": {
+            "Default": "simple",
+            "Description": "Operational Firewall Type",
+            "Type": "String"
+        },
+        "OdStepImageId": {
+            "Default": "ami-41912b40",
             "Description": "OnDemand Step Image ID", 
             "Type": "String"
         }, 
-        "OnDemandStepInstanceType": {
+        "OdStepInstanceType": {
             "Default": "t1.micro", 
             "Description": "OnDemand Step Instance Type", 
             "Type": "String"
         }, 
-        "OnDemandStepName": {
+        "OdStepName": {
             "Default": "od-step", 
             "Description": "OnDemand Step Name", 
             "Type": "String"
         },
-	"HighAvailabilityNatImageId": {
-            "Default": "ami-14d86d15",
-            "Description": "HighAvailability NAT Image ID", 
+	"NatImageIdProtected": {
+            "Default": "ami-41912b40",
+            "Description": "NAT Image ID Protected", 
             "Type": "String"
         }, 
-        "HighAvailabilityNatInstanceType": {
+        "NatInstanceTypeProtected": {
             "Default": "t1.micro", 
-            "Description": "HighAvailability NAT Instance Type", 
+            "Description": "NAT Instance Type Protected", 
             "Type": "String"
         }, 
-        "HighAvailabilityNatName": {
-            "Default": "ha-nat", 
-            "Description": "HighAvailability NAT Name", 
+        "NatNameProtected": {
+            "Default": "od-nat-protected", 
+            "Description": "NAT Name Protected", 
             "Type": "String"
         },
-	"OnDemandNatImageId": {
-            "Default": "ami-14d86d15",
-            "Description": "OnDemand NAT Image ID", 
+	"NatImageIdPrivate": {
+            "Default": "ami-41912b40",
+            "Description": "NAT Image ID Private", 
             "Type": "String"
         }, 
-        "OnDemandNatInstanceType": {
+        "NatInstanceTypePrivate": {
             "Default": "t1.micro", 
-            "Description": "OnDemand NAT Instance Type", 
+            "Description": "NAT Instance Type Private", 
             "Type": "String"
         }, 
-        "OnDemandNatName": {
-            "Default": "od-nat", 
-            "Description": "OnDemand NAT Name", 
+        "NatNamePrivate": {
+            "Default": "od-nat-private", 
+            "Description": "NAT Name Private", 
             "Type": "String"
         },
         "PowerUserName": {
@@ -78,10 +83,10 @@
         }
     }, 
     "Resources": {
-        "CloudFormationStackAllFull": {
+        "CloudFormationStackAll": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/integrator/suz-lab_all/0.0.4.json",
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/integrator/suz-lab_all/0.0.5.json",
 	        "Parameters": {
                     "VpcCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16" ] ] },
                     "SubnetPublicVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24" ] ] },
@@ -104,15 +109,16 @@
                     "SubnetPrivateFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] }, 
                     "SourceCidrIp": { "Ref": "SourceCidrIp" },
                     "KeyName": { "Ref": "KeyName" },
-                    "OnDemandStepImageId": { "Ref": "OnDemandStepImageId" },
-                    "OnDemandStepInstanceType": { "Ref": "OnDemandStepInstanceType" },
-                    "OnDemandStepName": { "Ref": "OnDemandStepName" },
-	            "HighAvailabilityNatImageId": { "Ref": "HighAvailabilityNatImageId" },
-                    "HighAvailabilityNatInstanceType": { "Ref": "HighAvailabilityNatInstanceType" },
-                    "HighAvailabilityNatName": { "Ref": "HighAvailabilityNatName" },
-	            "OnDemandNatImageId": { "Ref": "OnDemandNatImageId" },
-                    "OnDemandNatInstanceType": { "Ref": "OnDemandNatInstanceType" },
-                    "OnDemandNatName": { "Ref": "OnDemandNatName" },
+                    "OpFwType": { "Ref": "OpFwType" },
+                    "OdStepImageId": { "Ref": "OdStepImageId" },
+                    "OdStepInstanceType": { "Ref": "OdStepInstanceType" },
+                    "OdStepName": { "Ref": "OdStepName" },
+	            "NatImageIdProtected": { "Ref": "NatImageIdProtected" },
+                    "NatInstanceTypeProtected": { "Ref": "NatInstanceTypeProtected" },
+                    "NatNameProtected": { "Ref": "NatNameProtected" },
+	            "NatImageIdPrivate": { "Ref": "NatImageIdPrivate" },
+                    "NatInstanceTypePrivate": { "Ref": "NatInstanceTypePrivate" },
+                    "NatNamePrivate": { "Ref": "NatNamePrivate" },
                     "PowerUserName": { "Ref": "PowerUserName" }
 		}
 	    } 

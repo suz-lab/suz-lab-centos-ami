@@ -12,7 +12,7 @@
     }, 
     "Parameters": {
         "ImageId": {
-            "Default": "ami-14d86d15",
+            "Default": "ami-41912b40",
             "Description": "Image ID", 
             "Type": "String"
         }, 
@@ -63,7 +63,11 @@
 		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
                 "Tags": [
                     { "Key": "Name", "Value": { "Ref": "Name" } }
-                ]
+                ],
+                "UserData": { "Fn::Base64": { "Fn::Join": [ "\n", [
+                    "#include-once",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat"
+                ]]}}
             }, 
             "Type": "AWS::EC2::Instance"
         }, 

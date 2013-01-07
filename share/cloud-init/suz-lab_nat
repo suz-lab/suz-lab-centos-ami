@@ -7,7 +7,7 @@ cp /etc/sysctl.conf /etc/sysctl.conf.org
 sed -e "s/$FROM/$TO/" /etc/sysctl.conf.org > /etc/sysctl.conf
 sysctl -p
 service iptables start
-/sbin/iptables -t nat -A POSTROUTING -o eth0 -s 0.0.0.0/0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o eth0 -s 0.0.0.0/0 -j MASQUERADE
 service iptables save
 chkconfig iptables on
 exit 0
