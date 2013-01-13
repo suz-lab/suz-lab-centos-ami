@@ -33,10 +33,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_bindir}/jq
 
 %changelog
-* Sat Jan 12 2013 Hiroyasu Suzuki <suzuki@suz-lab.com> - 1.2-0_1
-- Initial Release
 * Sun Jan 13 2013 Hiroyasu Suzuki <suzuki@suz-lab.com> - 1.2-0_2
 - Change License from BSD to MIT. (My Mistake)
+* Sat Jan 12 2013 Hiroyasu Suzuki <suzuki@suz-lab.com> - 1.2-0_1
+- Initial Release
 
 %pre
 
