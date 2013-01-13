@@ -3,10 +3,10 @@
 Summary: Command-line JSON processor
 Name   : jq
 Version: %{version}
-Release: 0%{?dist}.suzlab_1
+Release: 0%{?dist}.suzlab_2
 Source0: jq-%{version}.tar.gz
 URL    : https://github.com/stedolan/jq
-License: BSD
+License: MIT
 Group  : Applications/System
 
 %description
@@ -35,6 +35,8 @@ rm -rf ${RPM_BUILD_ROOT}
 %changelog
 * Sat Jan 12 2013 Hiroyasu Suzuki <suzuki@suz-lab.com> - 1.2-0_1
 - Initial Release
+* Sun Jan 13 2013 Hiroyasu Suzuki <suzuki@suz-lab.com> - 1.2-0_2
+- Change License from BSD to MIT. (My Mistake)
 
 %pre
 
