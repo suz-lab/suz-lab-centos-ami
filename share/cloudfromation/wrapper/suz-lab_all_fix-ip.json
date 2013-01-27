@@ -26,13 +26,13 @@
             "Description": "Key Name", 
             "Type": "String"
         }, 
-        "OpFwType": {
-            "Default": "simple",
-            "Description": "Operational Firewall Type",
+        "OpFwOptionType": {
+            "Default": "vpc",
+            "Description": "Operational Firewall Option Type",
             "Type": "String"
         },
         "OdStepImageId": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "OnDemand Step Image ID", 
             "Type": "String"
         }, 
@@ -47,7 +47,7 @@
             "Type": "String"
         },
 	"NatImageIdProtected": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "NAT Image ID Protected", 
             "Type": "String"
         }, 
@@ -62,7 +62,7 @@
             "Type": "String"
         },
 	"NatImageIdPrivate": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "NAT Image ID Private", 
             "Type": "String"
         }, 
@@ -86,7 +86,7 @@
         "CloudFormationStackAll": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/integrator/suz-lab_all/0.0.5.json",
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/integrator/suz-lab_all/0.0.6.json",
 	        "Parameters": {
                     "VpcCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16" ] ] },
                     "SubnetPublicVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24" ] ] },
@@ -109,7 +109,7 @@
                     "SubnetPrivateFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] }, 
                     "SourceCidrIp": { "Ref": "SourceCidrIp" },
                     "KeyName": { "Ref": "KeyName" },
-                    "OpFwType": { "Ref": "OpFwType" },
+                    "OpFwOptionType": { "Ref": "OpFwOptionType" },
                     "OdStepImageId": { "Ref": "OdStepImageId" },
                     "OdStepInstanceType": { "Ref": "OdStepInstanceType" },
                     "OdStepName": { "Ref": "OdStepName" },

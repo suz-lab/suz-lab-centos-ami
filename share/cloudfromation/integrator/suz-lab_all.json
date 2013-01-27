@@ -1,3 +1,4 @@
+
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
     "Description": "SUZ-LAB Formation All", 
@@ -116,13 +117,13 @@
             "Description": "Key Name", 
             "Type": "String"
         }, 
-        "OpFwType": {
-            "Default": "simple",
-            "Description": "Operational Firewall Type",
+        "OpFwOptionType": {
+            "Default": "vpc",
+            "Description": "Operational Firewall Option Type",
             "Type": "String"
         }, 
         "OdStepImageId": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "OnDemand Step Image ID", 
             "Type": "String"
         }, 
@@ -137,7 +138,7 @@
             "Type": "String"
         },
 	"NatImageIdProtected": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "NAT Image ID Protected", 
             "Type": "String"
         }, 
@@ -152,7 +153,7 @@
             "Type": "String"
         },
 	"NatImageIdPrivate": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "NAT Image ID Private", 
             "Type": "String"
         }, 
@@ -209,33 +210,42 @@
 		}
 	    } 
 	},
-	"OpFw": {
+	"OpFwBase": {
   	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL":{ "Fn::Join": [ "", [ 
-                    "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/op-fw/suz-lab_op-fw_",
-                    { "Ref": "OpFwType" },
-                    "/0.0.1.json"
-                ] ] },
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_op-fw-base/0.0.1.json",
 	        "Parameters": {
 		    "VpcId": { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcIdBase" ] },
 		    "SourceCidrIp": { "Ref": "SourceCidrIp" }
 	        }
    	    }
         },
+        "OpFwOption": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+	        "TemplateURL":{ "Fn::Join": [ "", [ 
+                    "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_op-fw-option/",
+                    { "Ref": "OpFwOptionType" },
+                    "/0.0.1.json"
+                ] ] },
+                "Parameters": {
+                    "VpcId": { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcIdBase" ] }
+                }
+            }
+        },
 	"OdStep": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL" : "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-step/0.0.3.json",
-                "Parameters" : {
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-step/0.0.4.json",
+                "Parameters": {
                     "KeyName": { "Ref": "KeyName" },
                     "ImageId": { "Ref": "OdStepImageId" }, 
                     "InstanceType": { "Ref": "OdStepInstanceType" },
                     "Name": { "Ref": "OdStepName" },
 		    "IamInstanceProfile": { "Fn::GetAtt": [ "IamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
                     "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpStep" ] },
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpEc2" ] }
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpStep" ] },
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] }
                     ] ] },
                     "SubnetId": { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicVarA" ] }
                 }
@@ -244,7 +254,7 @@
 	"NatProtected": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-nat/0.0.5.json",
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-nat/0.0.6.json",
                 "Parameters": {
                     "KeyName": { "Ref": "KeyName" },
                     "ImageId": { "Ref": "NatImageIdProtected" }, 
@@ -253,8 +263,8 @@
                     "RouteTableId": { "Fn::GetAtt" : [ "VpcBase", "Outputs.RouteTableIdProtected" ] },
 		    "IamInstanceProfile": { "Fn::GetAtt": [ "IamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
 		    "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpNat" ] },
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpEc2" ] }
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] }
                     ] ] },
                     "SubnetId": { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicFixA" ] }
                 }
@@ -263,7 +273,7 @@
 	"NatPrivate": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-nat/0.0.5.json",
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-nat/0.0.6.json",
                 "Parameters": {
                     "KeyName": { "Ref": "KeyName" },
                     "ImageId": { "Ref": "NatImageIdPrivate" }, 
@@ -272,8 +282,8 @@
                     "RouteTableId": { "Fn::GetAtt" : [ "VpcBase", "Outputs.RouteTableIdPrivate" ] },
 		    "IamInstanceProfile": { "Fn::GetAtt": [ "IamBase", "Outputs.IAMInstanceProfilePowerUser" ] },
                     "SecurityGroupIds": { "Fn::Join": [ ",", [ 
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpNat" ] },
-                        { "Fn::GetAtt": [ "OpFw", "Outputs.SecurityGroupIdOpEc2" ] }
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
+                        { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] }
                     ] ] },
                     "SubnetId": { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicVarA" ] }
                 }

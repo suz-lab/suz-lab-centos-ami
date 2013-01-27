@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation Operational Firewall Simple", 
+    "Description": "SUZ-LAB Formation Operational Firewall Base", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -49,13 +49,6 @@
                 "GroupDescription": "od-maintenance", 
                 "VpcId": { "Ref": "VpcId" }
             }, 
-            "Type": "AWS::EC2::SecurityGroup"
-        },
-        "OpVpc": {
-            "Properties": {
-                "GroupDescription": "op-vpc",
-                "VpcId": { "Ref": "VpcId" }
-            },
             "Type": "AWS::EC2::SecurityGroup"
         },
 	"EC2SecurityGroupIngressOpStepSshSource": {
@@ -167,26 +160,6 @@
                 "ToPort": "443",
                 "CidrIp": "0.0.0.0/0"
             }
-        },
-        "EC2SecurityGroupIngressOpVpcInternal": {
-            "Type": "AWS::EC2::SecurityGroupIngress",
-            "Properties": {
-                "GroupId": { "Ref": "OpVpc" },
-                "IpProtocol": "-1",
-                "FromPort": "-1",
-                "ToPort": "-1",
-                "SourceSecurityGroupId": { "Ref": "OpVpc" }
-            }
-        },
-        "EC2SecurityGroupEgressOpVpcInternal": {
-            "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": { "Ref": "OpVpc" },
-                "IpProtocol": "-1",
-                "FromPort": "-1",
-                "ToPort": "-1",
-                "DestinationSecurityGroupId": { "Ref": "OpVpc" }
-            }   
         }
     },
     "Outputs": {

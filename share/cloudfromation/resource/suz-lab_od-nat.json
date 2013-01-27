@@ -12,7 +12,7 @@
     }, 
     "Parameters": {
         "ImageId": {
-            "Default": "ami-41912b40",
+            "Default": "ami-590a8f58",
             "Description": "Image ID", 
             "Type": "String"
         }, 
