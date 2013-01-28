@@ -26,10 +26,10 @@ case "$1" in
         AZ=`curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`
         REGION=`echo $AZ | cut -c 1-$((${#AZ} - 1))`
         INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
-        aws --region $REGION ec2 replace-route    \
-        --destination-cidr-block DESTINATION_CIDR \
-        --route-table-id         $ROUTE_TABLE_ID  \
-        --instance-id            $INSTANCE_ID     \
+        aws --region $REGION ec2 replace-route     \
+        --destination-cidr-block $DESTINATION_CIDR \
+        --route-table-id         $ROUTE_TABLE_ID   \
+        --instance-id            $INSTANCE_ID      \
         | logger -s -i -t $prog
         exit ${PIPESTATUS[0]}
         ;;
