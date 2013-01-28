@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# chkconfig: 2345 99 10
+# description: Associate EIP
+
+# Source Function Library
+. /etc/init.d/functions
+
+# System Variable
+prog=${0##*/}
+lock=/var/lock/subsys/$prog
+
+# User Variavle
+ROUTE_TABLE_ID=rtb-xxxxxxxx
+DESTINATION_CIDR=0.0.0.0/0
+
+# Source Config
+if [ -f /etc/sysconfig/$prog ] ; then
+    . /etc/sysconfig/$prog
+fi
+
+#
+case "$1" in
+    start)
+        touch $lock
+        AZ=`curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`
+        REGION=`echo $AZ | cut -c 1-$((${#AZ} - 1))`
+        INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+        aws --region $REGION ec2 replace-route    \
+        --destination-cidr-block DESTINATION_CIDR \
+        --route-table-id         $ROUTE_TABLE_ID  \
+        --instance-id            $INSTANCE_ID     \
+        | logger -s -i -t $prog
+        exit ${PIPESTATUS[0]}
+        ;;
+    stop)
+        rm -f $lock
+        exit 0
+        ;;
+    status)
+        if [ -f $lock ] ; then
+            exit 0
+        else
+            exit 3
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status}"
+        exit 1
+esac
