@@ -2,4 +2,5 @@
 set -e
 trap 'echo "NG: $?"' ERR
 /usr/lib64/fluent/ruby/bin/gem update 2>&1 | logger -s -t ${0##*/}
+service td-agent restart
 exit 0
