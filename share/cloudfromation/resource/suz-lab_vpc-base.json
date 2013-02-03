@@ -633,11 +633,7 @@
             "Description": "Cacoo Image",
             "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         }, 
-	"VpcCidrIpBase": {
-            "Description": " VPC CIDR IP",
-            "Value": { "Ref": "VpcCidrIp" }
-        },
-        "VpcIdBase": {
+        "VpcId": {
             "Description": "VPC ID",
 	    "Value": { "Ref": "EC2VPCBase" }
         },

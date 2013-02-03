@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation All Fix IP", 
+    "Description": "SUZ-LAB Formation Base Fix IP", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -20,73 +20,13 @@
             "Default"    : "10.0", 
             "Description": "VPC CIDR IP First 2 Octets", 
             "Type"       : "String"
-        },
-	"SourceCidrIp": {
-            "Default"    : "192.0.2.0/24",
-            "Description": "Source CIDR IP", 
-            "Type"       : "String"
-        },
-	"KeyName": {
-            "Default"    : "aws_ap-northeast-1", 
-            "Description": "Key Name", 
-            "Type"       : "String"
-        }, 
-        "OpFwOptionType": {
-            "Default"    : "vpc",
-            "Description": "Operational Firewall Option Type",
-            "Type"       : "String"
-        },
-        "OdStepImageId"  : {
-            "Default"    : "ami-590a8f58",
-            "Description": "OnDemand Step Image ID", 
-            "Type"       : "String"
-        }, 
-        "OdStepInstanceType": {
-            "Default"    : "t1.micro", 
-            "Description": "OnDemand Step Instance Type", 
-            "Type"       : "String"
-        }, 
-        "OdStepName": {
-            "Default"    : "od-step", 
-            "Description": "OnDemand Step Name", 
-            "Type"       : "String"
-        },
-	"NatImageIdProtected": {
-            "Default"    : "ami-590a8f58",
-            "Description": "NAT Image ID Protected", 
-            "Type"       : "String"
-        }, 
-        "NatInstanceTypeProtected": {
-            "Default"    : "t1.micro", 
-            "Description": "NAT Instance Type Protected", 
-            "Type"       : "String"
-        }, 
-        "NatNameProtected": {
-            "Default"    : "od-nat-protected", 
-            "Description": "NAT Name Protected", 
-            "Type"       : "String"
-        },
-	"NatImageIdPrivate": {
-            "Default"    : "ami-590a8f58",
-            "Description": "NAT Image ID Private", 
-            "Type"       : "String"
-        }, 
-        "NatInstanceTypePrivate": {
-            "Default"    : "t1.micro", 
-            "Description": "NAT Instance Type Private", 
-            "Type"       : "String"
-        }, 
-        "NatNamePrivate": {
-            "Default"    : "od-nat-private", 
-            "Description": "NAT Name Private", 
-            "Type"       : "String"
         }
     }, 
     "Resources": {
         "CloudFormationStackAll": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/integrator/suz-lab_all/0.0.7.json",
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/integrator/suz-lab_base/0.0.1.json",
 	        "Parameters": {
                     "PowerUserName"            : { "Ref": "PowerUserName" },
                     "VpcCidrIp"                : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16"  ] ] },
@@ -107,19 +47,7 @@
                     "SubnetPrivateVarCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".66.0/24" ] ] },
                     "SubnetPrivateFixACidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".72.0/24" ] ] },
                     "SubnetPrivateFixBCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".73.0/24" ] ] },
-                    "SubnetPrivateFixCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] }, 
-                    "SourceCidrIp"             : { "Ref": "SourceCidrIp" },
-                    "KeyName"                  : { "Ref": "KeyName" },
-                    "OpFwOptionType"           : { "Ref": "OpFwOptionType" },
-                    "OdStepImageId"            : { "Ref": "OdStepImageId" },
-                    "OdStepInstanceType"       : { "Ref": "OdStepInstanceType" },
-                    "OdStepName"               : { "Ref": "OdStepName" },
-	            "NatImageIdProtected"      : { "Ref": "NatImageIdProtected" },
-                    "NatInstanceTypeProtected" : { "Ref": "NatInstanceTypeProtected" },
-                    "NatNameProtected"         : { "Ref": "NatNameProtected" },
-	            "NatImageIdPrivate"        : { "Ref": "NatImageIdPrivate" },
-                    "NatInstanceTypePrivate"   : { "Ref": "NatInstanceTypePrivate" },
-                    "NatNamePrivate"           : { "Ref": "NatNamePrivate" }
+                    "SubnetPrivateFixCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] } 
 		}
 	    } 
 	}

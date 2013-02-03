@@ -18,7 +18,7 @@
         }
     }, 
     "Resources": {
-        "IAMRolePowerUser": {
+        "IamRolePowerUser": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
@@ -31,7 +31,7 @@
                 "Path": "/"
             }
         },
-        "IAMPolicyPowerUser": {
+        "IamPolicyPowerUser": {
             "Type": "AWS::IAM::Policy",
             "Properties": {
                 "PolicyName": { "Ref": "PowerUserName" },
@@ -42,14 +42,14 @@
                         "Resource": "*"
                     } ]
                 },
-                "Roles": [ { "Ref": "IAMRolePowerUser" } ]
+                "Roles": [ { "Ref": "IamRolePowerUser" } ]
             }
         },
-        "IAMInstanceProfilePowerUser": {
+        "IamInstanceProfilePowerUser": {
             "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Path": "/",
-                "Roles": [ { "Ref": "IAMRolePowerUser" } ]
+                "Roles": [ { "Ref": "IamRolePowerUser" } ]
             }
         }
     },
@@ -70,9 +70,9 @@
             "Description": "Cacoo Image",
             "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         },
-	"IAMInstanceProfilePowerUser": {
+	"IamInstanceProfilePowerUser": {
             "Description": "IAM Instance Profile Power User",
-            "Value": { "Ref": "IAMInstanceProfilePowerUser" }
+            "Value": { "Ref": "IamInstanceProfilePowerUser" }
         }
     } 
 }
