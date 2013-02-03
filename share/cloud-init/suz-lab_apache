@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+trap 'echo "NG: $?"' ERR
+yum -y install httpd mod_extract_forwarded
+if [ ! -L /etc/httpd/conf/httpd.conf ]; then
+    mv /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org
+    ln -s /opt/suz-lab/etc/apache/httpd.conf /etc/httpd/conf/httpd.conf
+fi
+if [ ! -f /etc/httpd/conf/virtual_host.conf ]; then
+    cat << EOT > /etc/httpd/conf/virtual_host.conf
+NameVirtualHost *:80
+<VirtualHost *:80>
+#    DocumentRoot /var/www/html
+#    ServerName   www.example.com
+</VirtualHost>
+EOT
+fi
+service httpd restart
+chkconfig httpd on
+exit 0
