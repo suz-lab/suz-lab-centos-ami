@@ -2,8 +2,9 @@
 set -e
 trap 'echo "NG: $?"' ERR
 yum clean all
-rm -f /etc/ssh/ssh_host_*
-rm -f /var/account/pacct
+rm -rf /tmp/*
+rm -f  /etc/ssh/ssh_host_*
+rm -f  /var/account/pacct
 echo "127.0.0.1       localhost.localdomain localhost" > /etc/hosts
 cd /var/lib/cloud
 rm -rf data handlers instance instances seed sem
