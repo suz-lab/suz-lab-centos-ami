@@ -1,0 +1,68 @@
+#/bin/sh
+trap 'echo "NG: $?"' ERR
+set -e
+
+yum -y install corosync pacemaker
+
+INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+MY_IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`
+HA_GROUP=`aws ec2 describe-instances --instance-ids $INSTANCE_ID \
+| jq '.reservationSet[] | .instancesSet[] | .tagSet[] | select(.key == "suz:ha-group") | .value'`
+
+
+RETRY_COUNT=5
+RETRY_INTERVAL=1
+set +e
+COUNT=0
+while true; do
+    YOUR_IP=`aws ec2 describe-instances --filters '{"name":"tag:suz:ha-group","values":['$HA_GROUP']}' \
+    | jq '.reservationSet[] | .instancesSet[] | .privateIpAddress | select(. != "'$MY_IP'")' \
+    | cut -f 2 -d \"`
+    if [ $? -eq 0 ]; then
+        break
+    fi
+    if [ $COUNT -eq $RETRY_COUNT ]; then
+        echo "Timeout!" >&2
+        exit 1
+    fi
+    COUNT=`expr $COUNT + 1`
+    sleep $RETRY_INTERVAL
+done
+
+set -e
+
+cat << EOT > /etc/corosync/corosync.conf
+compatibility: whitetank
+service {
+    name: pacemaker
+    ver: 0
+    use_mgmtd: yes
+}
+totem {
+    version: 2
+    secauth: off
+    transport: udpu
+    interface {
+        ringnumber: 0
+        transport: udpu
+        bindnetaddr: $MY_IP
+        mcastport: 5405
+        ttl: 1
+        member {
+            memberaddr: $MY_IP
+        }
+        member {
+            memberaddr: $YOUR_IP
+        }
+    }
+}
+logging {
+    to_syslog: yes
+    timestamp: on
+}
+EOT
+
+service corosync restart
+chkconfig corosync on
+
+exit 0
