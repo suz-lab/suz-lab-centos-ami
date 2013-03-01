@@ -1,0 +1,185 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09", 
+    "Description": "SUZ-LAB Formation Operational Firewall Base", 
+    "Mappings": {
+        "AvailabilityZoneMap": {
+            "ap-northeast-1": {
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
+            }
+        }
+    }, 
+    "Parameters": {
+	"VpcId": {
+            "Default"    : "vpc-xxxxxxxx",
+            "Description": "VPC ID", 
+            "Type"       : "String"
+        },
+	"SourceCidrIp": {
+            "Default"    : "192.0.2.0/24",
+            "Description": "Source CIDR IP", 
+            "Type"       : "String"
+        } 
+    }, 
+    "Resources": {
+	"OpStep": {
+            "Properties": {
+                "GroupDescription": "op-step", 
+                "VpcId"           : { "Ref": "VpcId" }
+            }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+	"OpEc2": {
+            "Properties": {
+                "GroupDescription": "op-ec2", 
+                "VpcId"           : { "Ref": "VpcId" }
+            }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+	"OpNat": {
+            "Properties": {
+                "GroupDescription": "op-nat", 
+                "VpcId"           : { "Ref": "VpcId" }
+            }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+	"OdMaintenance": {
+            "Properties": {
+                "GroupDescription": "od-maintenance", 
+                "VpcId"           : { "Ref": "VpcId" }
+            }, 
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+	"EC2SecurityGroupIngressOpEc2SshOpStep": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpEc2" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "22",
+                "ToPort"                    : "22",
+                "SourceSecurityGroupId"     : { "Ref": "OpStep" }
+            }
+	},
+	"EC2SecurityGroupEgressEc2NtpOpNat": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpEc2" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "123",
+                "ToPort"                    : "123",
+                "DestinationSecurityGroupId": { "Ref": "OpNat" }
+            }
+        },
+	"EC2SecurityGroupIngressOpNatHttpOdMaintenance": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "80",
+                "ToPort"                    : "80",
+                "SourceSecurityGroupId"     : { "Ref": "OdMaintenance" }
+            }
+        },
+	"EC2SecurityGroupIngressOpNatHttpsOdMaintenance": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties"                    : {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "SourceSecurityGroupId"     : { "Ref": "OdMaintenance" }
+            }
+        },
+	"EC2SecurityGroupIngressOpNatNtpOpEc2": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "123",
+                "ToPort"                    : "123",
+                "SourceSecurityGroupId"     : { "Ref": "OpEc2" }
+            }
+        },
+	"EC2SecurityGroupEgressOpNatHttpInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "80",
+                "ToPort"                    : "80",
+                "CidrIp"                    : "0.0.0.0/0"
+            }
+        },
+        "EC2SecurityGroupEgressOpNatHttpsInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "CidrIp"                    : "0.0.0.0/0"
+            }
+        },
+        "EC2SecurityGroupEgressOpNatNtpInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpNat" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "123",
+                "ToPort"                    : "123",
+                "CidrIp"                    : "0.0.0.0/0"
+            }
+        },
+	"EC2SecurityGroupEgressOdMaintenanceHttpInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OdMaintenance" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "80",
+                "ToPort"                    : "80",
+                "CidrIp"                    : "0.0.0.0/0"
+            }
+        },
+	"EC2SecurityGroupEgressOdMaintenanceHttpsInternet": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OdMaintenance" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "CidrIp"                    : "0.0.0.0/0"
+            }
+        }
+    },
+    "Outputs": {
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_operational-firewall/0.0.4.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        }, 
+	"SecurityGroupIdOpEc2": {
+            "Description": "Security Group ID OP EC2",
+	    "Value": { "Ref": "OpEc2" }
+        },
+	"SecurityGroupIdOpStep": {
+            "Description": "Security Group ID OP STEP",
+	    "Value": { "Ref": "OpStep" }
+        },
+	"SecurityGroupIdOpNat": {
+            "Description": "Security Group ID OP NAT",
+	    "Value": { "Ref": "OpNat" }
+        }
+    }
+}
