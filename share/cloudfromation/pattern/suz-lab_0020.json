@@ -22,7 +22,7 @@
             "Type"       : "String"
         }, 
         "ImageId": {
-            "Default"    : "ami-cd49cecc",
+            "Default"    : "ami-b1088eb0",
             "Description": "Image ID", 
             "Type"       : "String"
         },
