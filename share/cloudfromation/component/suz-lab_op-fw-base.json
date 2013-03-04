@@ -1,0 +1,133 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09", 
+    "Description": "SUZ-LAB Formation Operational Firewall Base", 
+    "Mappings": {
+        "AvailabilityZoneMap": {
+            "ap-northeast-1": {
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
+            }
+        }
+    }, 
+    "Parameters": {
+	"VpcId": {
+            "Default"    : "vpc-xxxxxxxx",
+            "Description": "VPC ID", 
+            "Type"       : "String"
+        }
+    }, 
+    "Resources": {
+	"OpEc2": {
+            "Type"      : "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "op-ec2", 
+                "VpcId"           : { "Ref": "VpcId" }
+            } 
+        },
+	"OdMaintenance": {
+            "Type"      : "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "od-maintenance", 
+                "VpcId"           : { "Ref": "VpcId" }
+            } 
+        },
+        "OpNat": {
+            "Type"      : "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "op-nat",
+                "VpcId"           : { "Ref": "VpcId" }
+            }
+        }, 
+	"EC2SecurityGroupEgressOdMaintenanceHttpInternet": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OdMaintenance" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "80",
+                "ToPort"               : "80",
+                "CidrIp"               : "0.0.0.0/0"
+            }
+        },
+	"EC2SecurityGroupEgressOdMaintenanceHttpsInternet": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OdMaintenance" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "443",
+                "ToPort"               : "443",
+                "CidrIp"               : "0.0.0.0/0"
+            }
+        },
+        "Ec2SecurityGroupIngressOpNatHttpOdMaintenance": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OpNat" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "80",
+                "ToPort"               : "80",
+                "SourceSecurityGroupId": { "Ref": "OdMaintenance" }
+            }
+        },
+        "Ec2SecurityGroupIngressOpNatHttpsOdMaintenance": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OpNat" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "443",
+                "ToPort"               : "443",
+                "SourceSecurityGroupId": { "Ref": "OdMaintenance" }
+            }
+        },
+        "Ec2SecurityGroupEgressOpNatHttpInternet": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OpNat" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "80",
+                "ToPort"               : "80",
+                "CidrIp"               : "0.0.0.0/0"
+            }
+        },
+        "Ec2SecurityGroupEgressOpNatHttpsInternet": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"              : { "Ref": "OpNat" },
+                "IpProtocol"           : "6",
+                "FromPort"             : "443",
+                "ToPort"               : "443",
+                "CidrIp"               : "0.0.0.0/0"
+            }
+        }
+    },
+    "Outputs": {
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_operational-firewall.json"
+        }, 
+        "S3JsonApNortheast1": {
+            "Description": "S3 JSON ap-northeast-1",
+            "Value"      : "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_operational-firewall/0.0.4.json"
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        }, 
+	"SecurityGroupIdOpEc2": {
+            "Description": "Security Group ID EC2",
+	    "Value"      : { "Ref": "OpEc2" }
+        },
+        "SecurityGroupIdOpNat": {
+            "Description": "Security Group ID NAT",
+            "Value"      : { "Ref": "OpNat" }
+        },
+        "SecurityGroupIdOdMaintenance": {
+            "Description": "Security Group ID Maintenance",
+            "Value"      : { "Ref": "OdMaintenance" }
+        }
+    }
+}

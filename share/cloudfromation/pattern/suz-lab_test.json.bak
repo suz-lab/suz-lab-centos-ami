@@ -116,7 +116,7 @@
             "Description": "Key Name", 
             "Type"       : "String"
         }, 
-        "OdStepImageId": {
+        "ImageId": {
             "Default"    : "ami-cd49cecc",
             "Description": "Image ID", 
             "Type"       : "String"
@@ -135,13 +135,23 @@
             "Default"    : "0.0.0.0/0",
             "Description": "Source CIDR IP",
             "Type"       : "String"
+        },
+        "HaNatInstanceType": {
+            "Default"    : "t1.micro",
+            "Description": "Instance Type",
+            "Type"       : "String"
+        },
+        "HaNatName": {
+            "Default"    : "ha-nat",
+            "Description": "Name",
+            "Type"       : "String"
         }
     },
     "Resources": {
 	"IamBase": {
   	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_iam-base/0.0.2.json",
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3-ap-northeast-1.amazonaws.com/cloudformation/resource/suz-lab_iam-base/0.0.2.json",
 	        "Parameters": {
 		    "PowerUserName": { "Ref" : "PowerUserName" } 
 	        }
@@ -150,7 +160,7 @@
 	"VpcBase": {
 	    "Type": "AWS::CloudFormation::Stack",
 	    "Properties": {
-	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_vpc-base/0.0.5.json",
+	        "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3-ap-northeast-1.amazonaws.com/cloudformation/resource/suz-lab_vpc-base/0.0.5.json",
 	        "Parameters": {
 		    "VpcCidrIp"                : { "Ref" : "VpcCidrIp" },
 		    "SubnetPublicVarACidrIp"   : { "Ref" : "SubnetPublicVarACidrIp" },
@@ -177,7 +187,7 @@
         "OpFwBase": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_op-fw-base/0.0.2.json",
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3-ap-northeast-1.amazonaws.com/cloudformation/resource/suz-lab_op-fw-base/0.0.2.json",
                 "Parameters" : {
                     "VpcId": { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcId" ] }
                 }
@@ -186,15 +196,33 @@
 	"OdStep": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3.amazonaws.com/cloudformation/resource/suz-lab_od-step/0.0.5.json",
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3-ap-northeast-1.amazonaws.com/cloudformation/resource/suz-lab_od-step/simple/0.0.5.json",
                 "Parameters": {
                     "KeyName"            : { "Ref": "KeyName" },
-                    "ImageId"            : { "Ref": "OdStepImageId" }, 
+                    "ImageId"            : { "Ref": "ImageId" }, 
                     "InstanceType"       : { "Ref": "OdStepInstanceType" },
                     "Name"               : { "Ref": "OdStepName" },
                     "SourceCidrIp"       : { "Ref": "OdStepSourceCidrIp" },
+                    "VpcId"              : { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcId" ] },
                     "IamInstanceProfile" : { "Fn::GetAtt": [ "IamBase", "Outputs.IamInstanceProfilePowerUser" ] },
                     "SubnetId"           : { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicVarA" ] },
+                    "TargetSecurityGroup": { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] }
+                }
+            }
+        },
+        "HaNat": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": "http://ap-northeast-1.cloudformation.suz-lab.com.s3-ap-northeast-1.amazonaws.com/cloudformation/resource/suz-lab_ha-nat/0.0.1.json",
+                "Parameters": {
+                    "KeyName"            : { "Ref": "KeyName" },
+                    "ImageId"            : { "Ref": "ImageId" },
+                    "InstanceType"       : { "Ref": "HaNatInstanceType" },
+                    "Name"               : { "Ref": "HaNatStepName" },
+                    "VpcId"              : { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcId" ] },
+                    "IamInstanceProfile" : { "Fn::GetAtt": [ "IamBase", "Outputs.IamInstanceProfilePowerUser" ] },
+                    "SubnetIdA"          : { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicFixA" ] },
+                    "SubnetIdB"          : { "Fn::GetAtt": [ "VpcBase", "Outputs.SubnetIdPublicFixB" ] },
                     "TargetSecurityGroup": { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] }
                 }
             }

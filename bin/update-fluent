@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 trap 'echo "NG: $?"' ERR
-service td-agent start
+service td-agent stop
 /usr/lib64/fluent/ruby/bin/gem update 2>&1 | logger -s -t ${0##*/}
 yes | /usr/lib64/fluent/ruby/bin/gem cleanup 2>&1 | logger -s -t ${0##*/}
-service td-agent stop
+service td-agent start
 exit 0

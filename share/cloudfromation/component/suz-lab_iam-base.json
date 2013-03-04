@@ -11,14 +11,14 @@
         }
     }, 
     "Parameters": {
-        "PowerUserName": {
-            "Default": "power-user", 
-            "Description": "Power User Name", 
+        "PolicyNameApi": {
+            "Default": "api", 
+            "Description": "Policy Name API", 
             "Type": "String"
         }
     }, 
     "Resources": {
-        "IamRolePowerUser": {
+        "IamRoleApi": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
@@ -31,10 +31,10 @@
                 "Path": "/"
             }
         },
-        "IamPolicyPowerUser": {
+        "IamPolicyApi": {
             "Type": "AWS::IAM::Policy",
             "Properties": {
-                "PolicyName": { "Ref": "PowerUserName" },
+                "PolicyName": { "Ref": "PolicyNameApi" },
                 "PolicyDocument": {
                     "Statement": [ {
                         "Effect": "Allow",
@@ -42,14 +42,14 @@
                         "Resource": "*"
                     } ]
                 },
-                "Roles": [ { "Ref": "IamRolePowerUser" } ]
+                "Roles": [ { "Ref": "IamRoleApi" } ]
             }
         },
-        "IamInstanceProfilePowerUser": {
+        "Api": {
             "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
                 "Path": "/",
-                "Roles": [ { "Ref": "IamRolePowerUser" } ]
+                "Roles": [ { "Ref": "IamRoleApi" } ]
             }
         }
     },
@@ -70,9 +70,9 @@
             "Description": "Cacoo Image",
             "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         },
-	"IamInstanceProfilePowerUser": {
-            "Description": "IAM Instance Profile Power User",
-            "Value": { "Ref": "IamInstanceProfilePowerUser" }
+	"IamInstanceProfileApi": {
+            "Description": "IAM Instance Profile API",
+            "Value": { "Ref": "Api" }
         }
     } 
 }

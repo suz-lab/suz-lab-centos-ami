@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation OnDemand Step", 
+    "Description": "SUZ-LAB Formation OnDemand Step Simple", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -11,6 +11,11 @@
         }
     }, 
     "Parameters": {
+        "VpcId": {
+            "Default"    : "vpc-xxxxxxxx",
+            "Description": "VPC ID",
+            "Type"       : "String"
+        },
         "ImageId": {
             "Default"    : "ami-xxxxxxxx",
             "Description": "Image ID", 
@@ -36,9 +41,19 @@
             "Description": "Source CIDR IP",
             "Type"       : "String"
         },
-        "TargetSecurityGroup": {
+        "SecurityGroupIdOpEc2": {
             "Default"    : "sg-xxxxxxxx",
-            "Description": "TargetSecurityGroup",
+            "Description": "Security Group ID EC2",
+            "Type"       : "String"
+        },
+        "SecurityGroupIdOpNat": {
+            "Default"    : "sg-xxxxxxxx",
+            "Description": "Security Group ID NAT",
+            "Type"       : "String"
+        },
+        "SecurityGroupIdOdMaintenance": {
+            "Default"    : "sg-xxxxxxxx",
+            "Description": "Security Group ID Maintenance",
             "Type"       : "String"
         },
         "SubnetId": {
@@ -60,7 +75,7 @@
                 "VpcId"           : { "Ref": "VpcId" }
             }
         },
-        "EC2SecurityGroupIngressOpStepSshSource": {
+        "Ec2SecurityGroupIngressOpStepSshSource": {
             "Type"      : "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId"                   : { "Ref": "OpStep" },
@@ -70,17 +85,27 @@
                 "CidrIp"                    : { "Ref": "SourceCidrIp" }
             }
         },
-        "EC2SecurityGroupEgressOpStepSshOpEc2": {
+        "Ec2SecurityGroupEgressOpStepSshOpEc2": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId"                   : { "Ref": "OpStep" },
                 "IpProtocol"                : "6",
                 "FromPort"                  : "22",
                 "ToPort"                    : "22",
-                "DestinationSecurityGroupId": { "Ref": "TargetSecurityGroup" }
+                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpEc2" }
             }
         },
-        "EC2SecurityGroupEgressOpStepNtpInternet": {
+        "Ec2SecurityGroupEgressOpStepSshOpNat": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {                 
+                "GroupId"                   : { "Ref": "OpStep" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "22",
+                "ToPort"                    : "22",
+                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
+            }
+        },
+        "Ec2SecurityGroupEgressOpStepNtpInternet": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId"                   : { "Ref": "OpStep" },
@@ -90,36 +115,49 @@
                 "CidrIp"                    : "0.0.0.0/0"
             }
         },
-        "EC2SecurityGroupIngressTargetSshOpStep": {
+        "Ec2SecurityGroupIngressOpEc2SshOpStep": {
             "Type"      : "AWS::EC2::SecurityGroupIngress",
             "Properties": {
-                "GroupId"                   : { "Ref": "TargetSecurityGroup" },
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpEc2" },
                 "IpProtocol"                : "6",
                 "FromPort"                  : "22",
                 "ToPort"                    : "22",
                 "SourceSecurityGroupId"     : { "Ref": "OpStep" }
             }   
-        },  
-        "EC2InstanceStep": {
+        }, 
+        "Ec2SecurityGroupIngressOpNatSshOpStep": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "22",
+                "ToPort"                    : "22",
+                "SourceSecurityGroupId"     : { "Ref": "OpStep" }
+            }   
+        },   
+        "Ec2InstanceStep": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
+                "SourceDestCheck"   : "true", 
                 "ImageId"           : { "Ref": "ImageId" }, 			
                 "InstanceType"      : { "Ref": "InstanceType" }, 
                 "KeyName"           : { "Ref": "KeyName" }, 
-                "SecurityGroupIds"  : [ { "Ref": "OpStep" } ], 
-                "SourceDestCheck"   : "true", 
                 "SubnetId"          : { "Ref": "SubnetId" }, 
 		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
+                "SecurityGroupIds"  : [
+                    { "Ref": "OpStep" },
+                    { "Ref": "SecurityGroupIdOdMaintenance" }
+                ], 
                 "Tags"              : [
                     { "Key": "Name", "Value": {"Ref": "Name" } } 
                 ]
             } 
         }, 
-        "EC2EIPStep": {
+        "Ec2EipStep": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc", 
-                "InstanceId": { "Ref": "EC2InstanceStep" }
+                "InstanceId": { "Ref": "Ec2InstanceStep" }
             } 
         }
     },
@@ -139,6 +177,14 @@
 	"CacooImage": {
             "Description": "Cacoo Image",
             "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        },
+	"SecurityGroupIdOpStep": {
+            "Description": "Security Group ID Step",
+            "Value"      : { "Ref": "OpStep" }
+        },
+	"PublicIpAddressStep": {
+            "Description": "Public IP Address Step",
+            "Value"      : { "Ref": "Ec2EipStep" }
         }
     }
-}
+} 

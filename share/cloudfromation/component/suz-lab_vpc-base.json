@@ -12,19 +12,19 @@
     }, 
     "Parameters": {
         "VpcCidrIp": {
-            "Default": "10.0.0.0/16", 
+            "Default"    : "10.0.0.0/16", 
             "Description": "VPC CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPublicVarACidrIp": {
-            "Default": "10.0.0.0/24", 
+            "Default"    : "10.0.0.0/24", 
             "Description": "Subnet Public Var A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPublicVarBCidrIp": {
-            "Default": "10.0.1.0/24", 
+            "Default"    : "10.0.1.0/24", 
             "Description": "Subnet Public Var B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPublicVarCCidrIp": {
             "Default": "10.0.2.0/24", 
@@ -32,79 +32,79 @@
             "Type": "String"
         },
         "SubnetPublicFixACidrIp": {
-            "Default": "10.0.8.0/24", 
+            "Default"    : "10.0.8.0/24", 
             "Description": "Subnet Public Fix A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPublicFixBCidrIp": {
-            "Default": "10.0.9.0/24", 
+            "Default"    : "10.0.9.0/24", 
             "Description": "Subnet Public Fix B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPublicFixCCidrIp": {
-            "Default": "10.0.10.0/24", 
+            "Default"    : "10.0.10.0/24", 
             "Description": "Subnet Public Fix C CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedVarACidrIp": {
-            "Default": "10.0.32.0/24", 
+            "Default"    : "10.0.32.0/24", 
             "Description": "Subnet Protected Var A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedVarBCidrIp": {
-            "Default": "10.0.33.0/24", 
+            "Default"    : "10.0.33.0/24", 
             "Description": "Subnet Protected Var B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedVarCCidrIp": {
-            "Default": "10.0.34.0/24", 
+            "Default"    : "10.0.34.0/24", 
             "Description": "Subnet Protected Var C CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedFixACidrIp": {
-            "Default": "10.0.40.0/24", 
+            "Default"    : "10.0.40.0/24", 
             "Description": "Subnet Protected Fix A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedFixBCidrIp": {
-            "Default": "10.0.41.0/24", 
+            "Default"    : "10.0.41.0/24", 
             "Description": "Subnet Protected Fix B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetProtectedFixCCidrIp": {
-            "Default": "10.0.42.0/24", 
+            "Default"    : "10.0.42.0/24", 
             "Description": "Subnet Protected Fix C CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },	
         "SubnetPrivateVarACidrIp": {
-            "Default": "10.0.64.0/24", 
+            "Default"    : "10.0.64.0/24", 
             "Description": "Subnet Private Var A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPrivateVarBCidrIp": {
-            "Default": "10.0.65.0/24", 
+            "Default"    : "10.0.65.0/24", 
             "Description": "Subnet Private Var B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPrivateVarCCidrIp": {
-            "Default": "10.0.66.0/24", 
+            "Default"    : "10.0.66.0/24", 
             "Description": "Subnet Private Var C CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPrivateFixACidrIp": {
-            "Default": "10.0.72.0/24", 
+            "Default"    : "10.0.72.0/24", 
             "Description": "Subnet Private Fix A CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPrivateFixBCidrIp": {
-            "Default": "10.0.73.0/24", 
+            "Default"    : "10.0.73.0/24", 
             "Description": "Subnet Private Fix B CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         },
         "SubnetPrivateFixCCidrIp": {
-            "Default": "10.0.74.0/24", 
+            "Default"    : "10.0.74.0/24", 
             "Description": "Subnet Private Fix C CIDR IP", 
-            "Type": "String"
+            "Type"       : "String"
         }
     }, 
     "Resources": {
@@ -479,136 +479,136 @@
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
 	"EC2SubnetRouteTableAssociationPublicVarA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicVarA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPublicVarB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicVarB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPublicVarC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicVarC" }
+            } 
         },
         "EC2SubnetRouteTableAssociationPublicFixA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicFixA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPublicFixB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicFixB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPublicFixC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPublicFixC" }
+            } 
         },
         "EC2SubnetRouteTableAssociationProtectedVarA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationProtectedVarB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationProtectedVarC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarC" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationProtectedFixA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationProtectedFixB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationProtectedFixC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixC" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateVarA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateVarB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateVarC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarC" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateFixA": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixA" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixA" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateFixB": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixB" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixB" }
+            } 
         }, 
         "EC2SubnetRouteTableAssociationPrivateFixC": {
+            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixC" }
+            } 
         }, 
 	"RDSDBSubnetGroup": {
-	    "Type" : "AWS::RDS::DBSubnetGroup",
+	    "Type"      : "AWS::RDS::DBSubnetGroup",
             "Properties": {
                 "DBSubnetGroupDescription" : { "Ref" : "AWS::StackName" },
-                "SubnetIds": [
+                "SubnetIds"                : [
 		    { "Ref": "EC2SubnetPrivateVarA" },
 		    { "Ref": "EC2SubnetPrivateVarB" },
                     { "Ref": "EC2SubnetPrivateVarC" }
@@ -619,39 +619,35 @@
     "Outputs": {
         "GithubMarkdown": {
             "Description": "Github Markdown",
-            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_vpc-base.md"
-        }, 
-        "GithubJson": {
-            "Description": "Github JSON",
-            "Value": "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_vpc-base.json"
-        }, 
-        "S3JsonApNortheast1": {
-            "Description": "S3 JSON ap-northeast-1",
-            "Value": "http://ap-northeast-1.template.suz-lab.com.s3.amazonaws.com/template/suz-lab_vpc-base/0.0.4.json"
-        }, 
-	"CacooImage": {
-            "Description": "Cacoo Image",
-            "Value": "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/suz-lab_vpc-base.md"
         }, 
         "VpcId": {
             "Description": "VPC ID",
-	    "Value": { "Ref": "EC2VPCBase" }
+	    "Value"      : { "Ref": "EC2VPCBase" }
         },
         "SubnetIdPublicVarA": {
             "Description": "Subnet ID Public Var A",
-            "Value": { "Ref": "EC2SubnetPublicVarA" }
+            "Value"      : { "Ref": "EC2SubnetPublicVarA" }
         },
         "SubnetIdPublicFixA": {
             "Description": "Subnet ID Public Fix A",
-            "Value": { "Ref": "EC2SubnetPublicFixA" }
+            "Value"      : { "Ref": "EC2SubnetPublicFixA" }
+        },
+        "SubnetIdPublicFixB": {
+            "Description": "Subnet ID Public Fix B",
+            "Value"      : { "Ref": "EC2SubnetPublicFixB" }
+        },
+        "SubnetIdProtectedFixA": {
+            "Description": "Subnet ID Protected Fix A",
+            "Value"      : { "Ref": "EC2SubnetProtectedFixA" }
         },
 	"RouteTableIdProtected": {
             "Description": "Route Table ID Protected",
-	    "Value": { "Ref": "EC2RouteTableProtected" }
+	    "Value"      : { "Ref": "EC2RouteTableProtected" }
         },
 	"RouteTableIdPrivate": {
             "Description": "Route Table ID Private",
-	    "Value": { "Ref": "EC2RouteTablePrivate" }
+	    "Value"      : { "Ref": "EC2RouteTablePrivate" }
         }
     }
 }

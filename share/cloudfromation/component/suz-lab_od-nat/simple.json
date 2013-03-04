@@ -12,79 +12,86 @@
     }, 
     "Parameters": {
         "ImageId": {
-            "Default": "ami-590a8f58",
+            "Default"    : "ami-590a8f58",
             "Description": "Image ID", 
-            "Type": "String"
+            "Type"       : "String"
         }, 
 	"InstanceType": {
-            "Default": "t1.micro", 
+            "Default"    : "t1.micro", 
             "Description": "Instance Type", 
-            "Type": "String"
+            "Type"       : "String"
         }, 
         "KeyName": {
-            "Default": "aws_ap-northeast-1", 
+            "Default"    : "aws_ap-northeast-1", 
             "Description": "Key Name", 
-            "Type": "String"
+            "Type"       : "String"
         }, 
         "Name": {
-            "Default": "od-nat", 
+            "Default"    : "od-nat", 
             "Description": "Name", 
-            "Type": "String"
+            "Type"       : "String"
         }, 
         "RouteTableId": {
-	    "Default": "rtb-xxxxxxxx", 
+	    "Default"    : "rtb-xxxxxxxx", 
             "Description": "Route Table ID", 
-            "Type": "String"
+            "Type"       : "String"
         }, 
-        "SecurityGroupIds": {
-            "Default": "sg-xxxxxxxx, sg-yyyyyyyy", 
-            "Description": "Security Group IDs", 
-            "Type": "CommaDelimitedList"
+        "SecurityGroupIdOpNat": {
+            "Default"    : "sg-xxxxxxxx", 
+            "Description": "Security Group ID NAT", 
+            "Type"       : "String"
+        }, 
+        "SecurityGroupIdOdMaintenance": {
+            "Default"    : "sg-xxxxxxxx", 
+            "Description": "Security Group ID Maintenance", 
+            "Type"       : "String"
         }, 
         "SubnetId": {
-            "Default": "subnet-xxxxxxxx", 
+            "Default"    : "subnet-xxxxxxxx", 
             "Description": "Subnet ID", 
-            "Type": "String"
+            "Type"       : "String"
         },
 	"IamInstanceProfile": {
+            "Default"    : "", 
             "Description": "IAM Instance Profile", 
-            "Type": "String"
+            "Type"       : "String"
         }
     }, 
     "Resources": {
-        "EC2InstanceNat": {
+        "Ec2InstanceNat": {
+            "Type"      : "AWS::EC2::Instance",
             "Properties": {
-                "ImageId": { "Ref": "ImageId" }, 			
-                "InstanceType": { "Ref": "InstanceType" },
-                "KeyName": { "Ref": "KeyName" },
-                "SecurityGroupIds": { "Ref": "SecurityGroupIds" }, 
-                "SourceDestCheck": "false", 
-                "SubnetId": { "Ref": "SubnetId" },
+                "SourceDestCheck"   : "false", 
+                "ImageId"           : { "Ref": "ImageId" }, 			
+                "InstanceType"      : { "Ref": "InstanceType" },
+                "KeyName"           : { "Ref": "KeyName" },
+                "SubnetId"          : { "Ref": "SubnetId" },
 		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
-                "Tags": [
-                    { "Key": "Name", "Value": { "Ref": "Name" } }
-                ],
-                "UserData": { "Fn::Base64": { "Fn::Join": [ "\n", [
+                "Tags"              : [ { "Key": "Name", "Value": { "Ref": "Name" } } ],
+                "SecurityGroupIds"  : [
+                    { "Ref": "SecurityGroupIdOpNat" },
+                    { "Ref": "SecurityGroupIdOdMaintenance" }
+                ], 
+                "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
                     "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat"
-                ]]}}
-            }, 
-            "Type": "AWS::EC2::Instance"
+                ] ] } }
+            }
         }, 
-        "EC2EIPNat": {
+        "Ec2EIPNat": {
+            "Type"      : "AWS::EC2::EIP",
             "Properties": {
-                "Domain": "vpc", 
-                "InstanceId": { "Ref": "EC2InstanceNat" }
-            }, 
-            "Type": "AWS::EC2::EIP"
+                "Domain"    : "vpc", 
+                "InstanceId": { "Ref": "Ec2InstanceNat" }
+            } 
         }, 
-	"EC2RouteNat": {
+	"Ec2RouteNat": {
+            "Type"      : "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0", 
-                "InstanceId": { "Ref": "EC2InstanceNat" },
-                "RouteTableId": { "Ref": "RouteTableId" }
-            }, 
-            "Type": "AWS::EC2::Route"
+                "InstanceId"          : { "Ref": "Ec2InstanceNat" },
+                "RouteTableId"        : { "Ref": "RouteTableId" }
+            } 
         }
     },
     "Outputs": {
