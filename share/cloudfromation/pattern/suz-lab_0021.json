@@ -1,0 +1,119 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09", 
+    "Description": "SUZ-LAB Formation 0021", 
+    "Mappings": {
+        "AvailabilityZoneMap": {
+            "ap-northeast-1": {
+                "AzA": "ap-northeast-1a", 
+                "AzB": "ap-northeast-1b", 
+                "AzC": "ap-northeast-1c"
+            }
+        }
+    }, 
+    "Parameters": {
+        "VpcCidrIpFirst2Octets": {
+            "Default"    : "10.0", 
+            "Description": "VPC CIDR IP First 2 Octets", 
+            "Type"       : "String"
+        },
+        "KeyName": {
+            "Default"    : "suz-lab_ap-northeast-1", 
+            "Description": "Key Name", 
+            "Type"       : "String"
+        }, 
+        "ImageId": {
+            "Default"    : "ami-b1088eb0",
+            "Description": "Image ID", 
+            "Type"       : "String"
+        },
+        "SourceCidrIp": {
+            "Default"    : "0.0.0.0/0",
+            "Description": "Source CIDR IP",
+            "Type"       : "String"
+        },
+        "OdStepType": {
+            "Default"    : "simple/0.0.5",
+            "Description": "Ondemand Step Type",
+            "Type"       : "String"
+        },
+        "OpAdminType": {
+            "Default"    : "simple/0.0.1",
+            "Description": "Operational Firewall Option Type", 
+            "Type"       : "String"
+        }
+    },
+    "Resources": {
+	"Pattern0020": {
+  	    "Type": "AWS::CloudFormation::Stack",
+	    "Properties": {
+	        "TemplateURL": { "Fn::Join": [ "", [
+                    "http://",
+                    { "Ref" : "AWS::Region" },
+                    ".cloudformation.suz-lab.com.s3-",
+                    { "Ref" : "AWS::Region" },
+                    ".amazonaws.com/cloudformation/pattern/suz-lab_0020/0.0.1.json"
+                ] ] },
+	        "Parameters": {
+		    "VpcCidrIpFirst2Octets": { "Ref": "VpcCidrIpFirst2Octets" }, 
+		    "KeyName"              : { "Ref": "KeyName" },
+		    "ImageId"              : { "Ref": "ImageId" }, 
+		    "SourceCidrIp"         : { "Ref": "SourceCidrIp" }, 
+		    "OdStepType"           : { "Ref": "OdStepType" }
+	        }
+   	    }
+        },
+        "OpAdmin": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Join": [ "", [
+                    "http://",
+                    { "Ref" : "AWS::Region" },
+                    ".cloudformation.suz-lab.com.s3-",
+                    { "Ref" : "AWS::Region" },
+                    ".amazonaws.com/cloudformation/component/suz-lab_op-admin/",
+                    { "Ref" : "OpAdminType" },
+                    ".json"
+                ] ] },
+                "Parameters": {
+                    "ImageId"                     : { "Ref": "ImageId" },
+	            "InstanceType"                : { "Ref": "InstanceType" },
+                    "KeyName"                     : { "Ref": "KeyName" },
+                    "Name"                        : { "Ref": "Name" },
+                    "VpcId"                       : { "Fn::GetAtt": [ "Pattern0020", "Outputs.VpcId" ] },
+                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "Pattern0020", "Outputs.SecurityGroupIdOpEc2" ] },
+                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "Pattern0020", "Outputs.SecurityGroupIdOpNat" ] },
+                    "SecurityGroupIdOpStep"       : { "Fn::GetAtt": [ "Pattern0020", "Outputs.SecurityGroupIdOpStep" ] },
+                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "Pattern0020", "Outputs.SecurityGroupIdOdMaintenance" ] },
+                    "SubnetId"                    : { "Fn::GetAtt": [ "Pattern0020", "Outputs.SubnetIdProtectedFixA" ] },
+	            "IamInstanceProfile"          : { "Fn::GetAtt": [ "Pattern0020", "Outputs.IamInstanceProfile" ] },
+                    "PrivateIpAddress"            : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.4"  ] ] }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "GithubMarkdown": {
+            "Description": "Github Markdown",
+            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/pattern/suz-lab_0001.md"
+        }, 
+        "GithubJson": {
+            "Description": "Github JSON",
+            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/pattern/suz-lab_0001.json"
+        }, 
+        "S3Json": {
+            "Description": "S3 JSON",
+            "Value"      : { "Fn::Join": [ "", [
+                "http://",     
+                { "Ref" : "AWS::Region" },
+                ".cloudformation.suz-lab.com.s3-",
+                { "Ref" : "AWS::Region" },
+                ".amazonaws.com/cloudformation/pattern/suz-lab_0001/0.0.1.json"
+            ] ] }
+        }, 
+	"CacooImage": {
+            "Description": "Cacoo Image",
+            "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        }
+    } 
+}
+

@@ -148,27 +148,33 @@
         }  
     },
     "Outputs": {
-        "GithubMarkdown": {
-            "Description": "Github Markdown",
-            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/pattern/suz-lab_0001.md"
-        }, 
-        "GithubJson": {
-            "Description": "Github JSON",
-            "Value"      : "https://github.com/suz-lab/suz-lab-centos-ami/blob/master/share/cloudfromation/pattern/suz-lab_0001.json"
-        }, 
-        "S3Json": {
-            "Description": "S3 JSON",
-            "Value"      : { "Fn::Join": [ "", [
-                "http://",     
-                { "Ref" : "AWS::Region" },
-                ".cloudformation.suz-lab.com.s3-",
-                { "Ref" : "AWS::Region" },
-                ".amazonaws.com/cloudformation/pattern/suz-lab_0001/0.0.1.json"
-            ] ] }
-        }, 
-	"CacooImage": {
-            "Description": "Cacoo Image",
-            "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        "VpcId": {
+            "Description": "VpcId",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0000", "Outputs.VpcId" ] }
+        },
+        "SubnetIdProtectedFixA": {
+            "Description": "Subnet ID Protected Fix Zone A",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdProtectedFixA" ] }
+        },
+        "IamInstanceProfile": {
+            "Description": "IAM Instance Profile",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0001", "Outputs.IamInstanceProfile" ] }
+        },
+        "SecurityGroupIdOpEc2": {
+            "Description": "Security Group ID EC2",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpEc2" ] }
+        },
+        "SecurityGroupIdOpNat": {
+            "Description": "Security Group ID NAT",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpNat" ] }
+        },
+        "SecurityGroupIdOpStep": {
+            "Description": "Security Group ID Step",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpStep" ] }
+        },
+        "SecurityGroupIdOdMaintenance": {
+            "Description": "Security Group ID Maintenance",
+            "Value"      : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOdMaintenance" ] }
         }
     } 
 }

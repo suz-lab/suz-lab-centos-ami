@@ -154,7 +154,7 @@
                 "Tags"              : [ { "Key": "Name", "Value": { "Ref": "Name" } } ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_op-admin"
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_op-admin/simple"
                 ] ] } }
             }   
         }
@@ -175,14 +175,6 @@
 	"CacooImage": {
             "Description": "Cacoo Image",
             "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
-        },
-	"SecurityGroupIdOpStep": {
-            "Description": "Security Group ID Step",
-            "Value"      : { "Ref": "OpStep" }
-        },
-	"PublicIpAddressStep": {
-            "Description": "Public IP Address Step",
-            "Value"      : { "Ref": "Ec2EipStep" }
         }
     }
 } 
