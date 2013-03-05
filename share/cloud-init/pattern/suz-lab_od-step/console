@@ -1,0 +1,4 @@
+#/bin/sh
+trap 'echo "NG: $?"' ERR
+set -e
+exit 0

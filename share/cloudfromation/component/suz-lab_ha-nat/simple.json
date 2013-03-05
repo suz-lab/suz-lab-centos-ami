@@ -163,7 +163,7 @@
                 "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
             }
         },
-        "Ec2InstanceNatA": {
+        "Ec2InstanceHaNatA": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "false", 
@@ -180,11 +180,11 @@
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat"
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat/simple"
                 ] ] } }
             }   
         },
-        "Ec2InstanceNatB": {
+        "Ec2InstanceHaNatB": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "false", 
@@ -201,29 +201,29 @@
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat"
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat/simple"
                 ] ] } }
             }   
         },
-        "Ec2EIPNatA": {
+        "Ec2EIPHaNatA": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc",
-                "InstanceId": { "Ref": "Ec2InstanceNatA" }
+                "InstanceId": { "Ref": "Ec2InstanceHaNatA" }
             }  
         },    
-        "Ec2EIPNatB": {
+        "Ec2EIPHaNatB": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc",
-                "InstanceId": { "Ref": "Ec2InstanceNatB" }
+                "InstanceId": { "Ref": "Ec2InstanceHaNatB" }
             }  
         },  
- 	"Ec2RouteNat": {
+ 	"Ec2RouteHaNat": {
             "Type"      : "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0", 
-                "InstanceId"          : { "Ref": "Ec2InstanceNatA" },
+                "InstanceId"          : { "Ref": "Ec2InstanceHaNatA" },
                 "RouteTableId"        : { "Ref": "RouteTableId" }
             } 
         },

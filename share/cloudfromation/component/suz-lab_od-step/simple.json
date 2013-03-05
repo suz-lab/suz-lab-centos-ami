@@ -135,7 +135,7 @@
                 "SourceSecurityGroupId"     : { "Ref": "OpStep" }
             }   
         },   
-        "Ec2InstanceStep": {
+        "Ec2InstanceOdStep": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "true", 
@@ -150,14 +150,18 @@
                 ], 
                 "Tags"              : [
                     { "Key": "Name", "Value": {"Ref": "Name" } } 
-                ]
+                ],
+                "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
+                    "#include-once",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_od-simple/simple"
+                ] ] } }
             } 
         }, 
-        "Ec2EipStep": {
+        "Ec2EipOdStep": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc", 
-                "InstanceId": { "Ref": "Ec2InstanceStep" }
+                "InstanceId": { "Ref": "Ec2InstanceOdStep" }
             } 
         }
     },
@@ -184,7 +188,7 @@
         },
 	"PublicIpAddressStep": {
             "Description": "Public IP Address Step",
-            "Value"      : { "Ref": "Ec2EipStep" }
+            "Value"      : { "Ref": "Ec2EipOdStep" }
         }
     }
 } 
