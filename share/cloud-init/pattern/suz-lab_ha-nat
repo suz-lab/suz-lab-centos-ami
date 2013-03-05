@@ -1,0 +1,6 @@
+#/bin/sh
+trap 'echo "NG: $?"' ERR
+set -e
+curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_nat | sh
+curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_ha | sh
+exit 0

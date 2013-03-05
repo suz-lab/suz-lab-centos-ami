@@ -155,7 +155,7 @@
                 "SubnetId"          : { "Ref": "SubnetIdA" },
                 "PrivateIpAddress"  : { "Ref": "PrivateIpAddressA" },
                 "Tags"              : [ 
-                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "b" ] ] } },
+                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "a" ] ] } },
                     { "Key": "suz:ha-group", "Value": { "Ref": "Name" } }
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
