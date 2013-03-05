@@ -56,9 +56,14 @@
             "Description": "Security Group ID Maintenance",
             "Type"       : "String"
         },
-        "SubnetId": {
+        "SubnetIdEc2": {
             "Default"    : "subnet-xxxxxxxx", 
-            "Description": "Subnet ID", 
+            "Description": "Subnet ID EC2", 
+            "Type"       : "String"
+        },
+        "SubnetIdElb": {
+            "Default"    : "subnet-xxxxxxxx", 
+            "Description": "Subnet ID ELB", 
             "Type"       : "String"
         },
         "PrivateIpAddress": {
@@ -77,6 +82,13 @@
             "Type"      : "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "op-admin",
+                "VpcId"           : { "Ref": "VpcId" }
+            }
+        },
+        "OpAdminLb": {
+            "Type"      : "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "op-admin-lb",
                 "VpcId"           : { "Ref": "VpcId" }
             }
         },
@@ -110,6 +122,16 @@
                 "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpNat" }
             }
         },
+        "Ec2SecurityGroupIngressOpAdminLdapOpAdminLb": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdmin" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "SourceSecurityGroupId"     : { "Ref": "OpAdminLb" }
+            }
+        },
         "Ec2SecurityGroupEgressOpEc2LdapOpAdmin": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
@@ -127,6 +149,16 @@
                 "IpProtocol"                : "6",
                 "FromPort"                  : "389",
                 "ToPort"                    : "389",
+                "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
+            }
+        },
+        "Ec2SecurityGroupEgressOpStepSshOpAdmin": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpStep" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "22",
+                "ToPort"                    : "22",
                 "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
@@ -149,7 +181,7 @@
                 "KeyName"           : { "Ref": "KeyName" },
                 "SecurityGroupIds"  : [ { "Ref": "OpAdmin" }, { "Ref": "SecurityGroupIdOdMaintenance" } ], 
                 "IamInstanceProfile": { "Ref": "IamInstanceProfile" },
-                "SubnetId"          : { "Ref": "SubnetId" },
+                "SubnetId"          : { "Ref": "SubnetIdEc2" },
                 "PrivateIpAddress"  : { "Ref": "PrivateIpAddress" },
                 "Tags"              : [ { "Key": "Name", "Value": { "Ref": "Name" } } ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
@@ -157,6 +189,26 @@
                     "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_op-admin/simple"
                 ] ] } }
             }   
+        },
+        "ElasticLoadBalancingLoadBalancerOpAdmin": {
+            "Type"      : "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "Subnets"       : [ { "Ref": "SubnetIdEc2" } ],
+                "Instances"     : [ { "Ref": "Ec2InstanceOpAdmin" } ],
+                "SecurityGroups": [ { "Ref": "OpAdminLb" } ],
+                "Listeners" : [ {
+                    "LoadBalancerPort": "443",
+                    "InstancePort"    : "443",
+                    "Protocol"        : "TCP"
+                } ],
+                HealthCheck"    : {
+                    "Target"            : "TCP:443",
+                    "HealthyThreshold"  : "2",
+                    "UnhealthyThreshold": "2",
+                    "Interval"          : "30",
+                    "Timeout"           : "5"
+                }
+            }
         }
     },
     "Outputs": {

@@ -152,7 +152,7 @@
             "Properties": {
                 "Path"         : "/",
                 "Groups"       : [ { "Ref": "Proxy" } ],
-                "LoginProfile" : { "Password" : { "Ref": "AWS::StackId"} }
+                "LoginProfile" : { "Password" : { "Ref": "AWS::StackName"} }
             }
         }
     },
@@ -172,6 +172,10 @@
 	"CacooImage": {
             "Description": "Cacoo Image",
             "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
+        },
+        "SecurityGroupIdOpStep": {
+            "Description": "Security Group ID Step",
+            "Value"      : { "Fn::GetAtt": [ "OdStepSimple", "Outputs.SecurityGroupIdOpStep" ] }
         }
     }
 } 

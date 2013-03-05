@@ -1,6 +1,6 @@
 #/bin/sh
 trap 'echo "NG: $?"' ERR
 set -e
-curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_nat | sh | logger -s -t ha-nat_simple
-curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_ha  | sh | logger -s -t ha-nat_simple
+curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_nat | sh 2>&1 | logger -s -t ha-nat_simple
+curl -s https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/component/suz-lab_ha  | sh 2>&1 | logger -s -t ha-nat_simple
 exit 0
