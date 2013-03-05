@@ -93,6 +93,16 @@
                 "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpEc2" }
             }
         },
+        "Ec2SecurityGroupIngressOpNatCorosyncOpNat": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "5405",
+                "ToPort"                    : "5405",
+                "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpNat" }
+            }
+        },
         "Ec2SecurityGroupIngressOpNatSmtpOpEc2": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
@@ -111,6 +121,16 @@
                 "FromPort"                  : "123",
                 "ToPort"                    : "123",
                 "CidrIp"                    : "0.0.0.0/0"
+            }
+        },
+        "Ec2SecurityGroupEgressOpNatCorosyncOpNat": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "5405",
+                "ToPort"                    : "5405",
+                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
             }
         },
         "Ec2SecurityGroupEgressOpNatSmtpInternet": {
@@ -160,8 +180,7 @@
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_ha"
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat"
                 ] ] } }
             }   
         },
@@ -182,8 +201,7 @@
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
                     "#include-once",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat",
-                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_ha"
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/pattern/suz-lab_ha-nat"
                 ] ] } }
             }   
         },
