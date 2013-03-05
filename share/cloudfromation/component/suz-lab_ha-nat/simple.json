@@ -147,18 +147,24 @@
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "false", 
-                "ImageId"           : { "Ref": "ImageId" }, 			
+                "ImageId"           : { "Ref": "ImageId" },     
                 "InstanceType"      : { "Ref": "InstanceType" },
                 "KeyName"           : { "Ref": "KeyName" },
                 "SecurityGroupIds"  : [ { "Ref": "SecurityGroupIdOpNat" }, { "Ref": "SecurityGroupIdOdMaintenance" } ], 
-		"IamInstanceProfile": { "Ref": "IamInstanceProfile" },
+                "IamInstanceProfile": { "Ref": "IamInstanceProfile" },
                 "SubnetId"          : { "Ref": "SubnetIdA" },
                 "PrivateIpAddress"  : { "Ref": "PrivateIpAddressA" },
-                "Tags"              : [
-                    { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "a" ] ] } }
-                ]
-            } 
-        }, 
+                "Tags"              : [ 
+                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "b" ] ] } },
+                    { "Key": "suz:ha-group", "Value": { "Ref": "Name" } }
+                ],   
+                "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
+                    "#include-once",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_ha"
+                ] ] } }
+            }   
+        },
         "Ec2InstanceNatB": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
@@ -171,8 +177,14 @@
                 "SubnetId"          : { "Ref": "SubnetIdB" },
                 "PrivateIpAddress"  : { "Ref": "PrivateIpAddressB" },
                 "Tags"              : [ 
-                    { "Key": "Name", "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "b" ] ] } }
-                ]   
+                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "b" ] ] } },
+                    { "Key": "suz:ha-group", "Value": { "Ref": "Name" } }
+                ],   
+                "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
+                    "#include-once",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_nat",
+                    "https://raw.github.com/suz-lab/suz-lab-centos-ami/master/share/cloud-init/suz-lab_ha"
+                ] ] } }
             }   
         },
         "Ec2EIPNatA": {

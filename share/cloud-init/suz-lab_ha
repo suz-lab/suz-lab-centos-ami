@@ -7,8 +7,7 @@ yum -y install corosync pacemaker
 INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
 MY_IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`
 HA_GROUP=`aws ec2 describe-instances --instance-ids $INSTANCE_ID \
-| jq '.reservationSet[] | .instancesSet[] | .tagSet[] | select(.key == "suz:ha-group") | .value'`
-
+| jq '.Reservations[] | .Instances[] | .Tags[] | select(.Key == "suz:ha-group") | .Value'`
 
 RETRY_COUNT=5
 RETRY_INTERVAL=1
@@ -16,7 +15,7 @@ set +e
 COUNT=0
 while true; do
     YOUR_IP=`aws ec2 describe-instances --filters '{"name":"tag:suz:ha-group","values":['$HA_GROUP']}' \
-    | jq '.reservationSet[] | .instancesSet[] | .privateIpAddress | select(. != "'$MY_IP'")' \
+    | jq '.Reservations[] | .Instances[] | .NetworkInterfaces[] | .PrivateIpAddress | select(. != "'$MY_IP'")' \
     | cut -f 2 -d \"`
     if [ $? -eq 0 ]; then
         break
