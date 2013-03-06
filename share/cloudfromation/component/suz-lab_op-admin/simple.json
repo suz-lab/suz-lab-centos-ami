@@ -75,6 +75,11 @@
             "Default"    : "", 
             "Description": "IAM Instance Profile", 
             "Type"       : "String"
+        },
+        "SourceCidrIp": {
+            "Default"    : "0.0.0.0/0",
+            "Description": "Source CIDR IP",
+            "Type"       : "String"
         }
     }, 
     "Resources": {
@@ -122,7 +127,7 @@
                 "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpNat" }
             }
         },
-        "Ec2SecurityGroupIngressOpAdminLdapOpAdminLb": {
+        "Ec2SecurityGroupIngressOpAdminHttpsOpAdminLb": {
             "Type"      : "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId"                   : { "Ref": "OpAdmin" },
@@ -172,6 +177,26 @@
                 "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
+        "Ec2SecurityGroupIngressOpAdminLbHttpsOpAdmin": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdminLb" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "CidrIp"                    : { "Ref": "SourceCidrIp" }
+            }
+        },
+        "Ec2SecurityGroupEgressOpAdminLbHttpsOpAdmin": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdminLb" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "443",
+                "ToPort"                    : "443",
+                "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
+            }
+        },
         "Ec2InstanceOpAdmin": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
@@ -201,7 +226,7 @@
                     "InstancePort"    : "443",
                     "Protocol"        : "TCP"
                 } ],
-                HealthCheck"    : {
+                "HealthCheck"    : {
                     "Target"            : "TCP:443",
                     "HealthyThreshold"  : "2",
                     "UnhealthyThreshold": "2",
