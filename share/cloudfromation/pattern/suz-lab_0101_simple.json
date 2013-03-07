@@ -11,6 +11,16 @@
         }
     }, 
     "Parameters": {
+        "Az1": {
+            "Default"    : "a", 
+            "Description": "Availability Zone 1", 
+            "Type"       : "String"
+        },
+        "Az2": {
+            "Default"    : "b", 
+            "Description": "Availability Zone 2", 
+            "Type"       : "String"
+        },
         "VpcCidrIpFirst2Octets": {
             "Default"    : "10.0", 
             "Description": "VPC CIDR IP First 2 Octets", 
@@ -39,25 +49,21 @@
                     ".amazonaws.com/cloudformation/component/suz-lab_vpc-base/0.0.5.json"
                 ] ] },
                 "Parameters": {
+                    "Az1"                      : { "Ref": "Az1"},
+                    "Az2"                      : { "Ref": "Az2"},
                     "VpcCidrIp"                : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16"  ] ] },
-                    "SubnetPublicVarACidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24"  ] ] },
-                    "SubnetPublicVarBCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".1.0/24"  ] ] },
-                    "SubnetPublicVarCCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".2.0/24"  ] ] },
-                    "SubnetPublicFixACidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".8.0/24"  ] ] },
-                    "SubnetPublicFixBCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".9.0/24"  ] ] },
-                    "SubnetPublicFixCCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".10.0/24" ] ] },
-                    "SubnetProtectedVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".32.0/24" ] ] },
-                    "SubnetProtectedVarBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".33.0/24" ] ] },
-                    "SubnetProtectedVarCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".34.0/24" ] ] },
-                    "SubnetProtectedFixACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.0/24" ] ] },
-                    "SubnetProtectedFixBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".41.0/24" ] ] },
-                    "SubnetProtectedFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".42.0/24" ] ] },
-                    "SubnetPrivateVarACidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".64.0/24" ] ] },
-                    "SubnetPrivateVarBCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".65.0/24" ] ] },
-                    "SubnetPrivateVarCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".66.0/24" ] ] },
-                    "SubnetPrivateFixACidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".72.0/24" ] ] },
-                    "SubnetPrivateFixBCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".73.0/24" ] ] },
-                    "SubnetPrivateFixCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] } 
+                    "SubnetPublicVar1CidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24"  ] ] },
+                    "SubnetPublicVar2CidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".1.0/24"  ] ] },
+                    "SubnetPublicFix1CidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".8.0/24"  ] ] },
+                    "SubnetPublicFix2CidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".9.0/24"  ] ] },
+                    "SubnetProtectedVar1CidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".32.0/24" ] ] },
+                    "SubnetProtectedVar2CidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".33.0/24" ] ] },
+                    "SubnetProtectedFix1CidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.0/24" ] ] },
+                    "SubnetProtectedFix2CidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".41.0/24" ] ] },
+                    "SubnetPrivateVar1CidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".64.0/24" ] ] },
+                    "SubnetPrivateVar2CidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".65.0/24" ] ] },
+                    "SubnetPrivateFix1CidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".72.0/24" ] ] },
+                    "SubnetPrivateFix2CidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".73.0/24" ] ] }
                 }
             } 
         },
@@ -106,7 +112,7 @@
                     "InstanceType"                : "t1.micro",
                     "KeyName"                     : { "Ref": "KeyName" },
                     "ImageId"                     : { "Ref": "ImageId" },
-                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVarA" ] },
+                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVar1" ] },
                     "RouteTableId"                : { "Fn::GetAtt": [ "VpcBase" , "Outputs.RouteTableIdProtected" ] },
                     "IamInstanceProfile"          : { "Fn::GetAtt": [ "IamBase" , "Outputs.IamInstanceProfileApi" ] },
                     "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
@@ -129,7 +135,7 @@
                     "InstanceType"                : "t1.micro",
                     "KeyName"                     : { "Ref": "KeyName" },
                     "ImageId"                     : { "Ref": "ImageId" },
-                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVarA" ] },
+                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVar1" ] },
                     "RouteTableId"                : { "Fn::GetAtt": [ "VpcBase" , "Outputs.RouteTableIdPrivate" ] },
                     "IamInstanceProfile"          : { "Fn::GetAtt": [ "IamBase" , "Outputs.IamInstanceProfileApi" ] },
                     "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },

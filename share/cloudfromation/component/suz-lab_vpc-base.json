@@ -11,99 +11,79 @@
         }
     }, 
     "Parameters": {
+        "Az1": {
+            "Default"    : "a",
+            "Description": "Availability Zone 1",
+            "Type"       : "String"
+        },
+        "Az2": {
+            "Default"    : "b",
+            "Description": "Availability Zone 2",
+            "Type"       : "String"
+        },
         "VpcCidrIp": {
             "Default"    : "10.0.0.0/16", 
             "Description": "VPC CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPublicVarACidrIp": {
+        "SubnetPublicVar1CidrIp": {
             "Default"    : "10.0.0.0/24", 
-            "Description": "Subnet Public Var A CIDR IP", 
+            "Description": "Subnet Public Var 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPublicVarBCidrIp": {
+        "SubnetPublicVar2CidrIp": {
             "Default"    : "10.0.1.0/24", 
-            "Description": "Subnet Public Var B CIDR IP", 
+            "Description": "Subnet Public Var 2 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPublicVarCCidrIp": {
-            "Default": "10.0.2.0/24", 
-            "Description": "Subnet Public Var C CIDR IP", 
-            "Type": "String"
-        },
-        "SubnetPublicFixACidrIp": {
+        "SubnetPublicFix1CidrIp": {
             "Default"    : "10.0.8.0/24", 
-            "Description": "Subnet Public Fix A CIDR IP", 
+            "Description": "Subnet Public Fix 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPublicFixBCidrIp": {
+        "SubnetPublicFix2CidrIp": {
             "Default"    : "10.0.9.0/24", 
-            "Description": "Subnet Public Fix B CIDR IP", 
+            "Description": "Subnet Public Fix 2 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPublicFixCCidrIp": {
-            "Default"    : "10.0.10.0/24", 
-            "Description": "Subnet Public Fix C CIDR IP", 
-            "Type"       : "String"
-        },
-        "SubnetProtectedVarACidrIp": {
+        "SubnetProtectedVar1CidrIp": {
             "Default"    : "10.0.32.0/24", 
-            "Description": "Subnet Protected Var A CIDR IP", 
+            "Description": "Subnet Protected Var 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetProtectedVarBCidrIp": {
+        "SubnetProtectedVar2CidrIp": {
             "Default"    : "10.0.33.0/24", 
-            "Description": "Subnet Protected Var B CIDR IP", 
+            "Description": "Subnet Protected Var 2 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetProtectedVarCCidrIp": {
-            "Default"    : "10.0.34.0/24", 
-            "Description": "Subnet Protected Var C CIDR IP", 
-            "Type"       : "String"
-        },
-        "SubnetProtectedFixACidrIp": {
+        "SubnetProtectedFix1CidrIp": {
             "Default"    : "10.0.40.0/24", 
-            "Description": "Subnet Protected Fix A CIDR IP", 
+            "Description": "Subnet Protected Fix 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetProtectedFixBCidrIp": {
+        "SubnetProtectedFix2CidrIp": {
             "Default"    : "10.0.41.0/24", 
-            "Description": "Subnet Protected Fix B CIDR IP", 
+            "Description": "Subnet Protected Fix 2 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetProtectedFixCCidrIp": {
-            "Default"    : "10.0.42.0/24", 
-            "Description": "Subnet Protected Fix C CIDR IP", 
-            "Type"       : "String"
-        },	
-        "SubnetPrivateVarACidrIp": {
+        "SubnetPrivateVar1CidrIp": {
             "Default"    : "10.0.64.0/24", 
-            "Description": "Subnet Private Var A CIDR IP", 
+            "Description": "Subnet Private Var 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPrivateVarBCidrIp": {
+        "SubnetPrivateVar2CidrIp": {
             "Default"    : "10.0.65.0/24", 
-            "Description": "Subnet Private Var B CIDR IP", 
+            "Description": "Subnet Private Var 2 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPrivateVarCCidrIp": {
-            "Default"    : "10.0.66.0/24", 
-            "Description": "Subnet Private Var C CIDR IP", 
-            "Type"       : "String"
-        },
-        "SubnetPrivateFixACidrIp": {
+        "SubnetPrivateFix1CidrIp": {
             "Default"    : "10.0.72.0/24", 
-            "Description": "Subnet Private Fix A CIDR IP", 
+            "Description": "Subnet Private Fix 1 CIDR IP", 
             "Type"       : "String"
         },
-        "SubnetPrivateFixBCidrIp": {
+        "SubnetPrivateFix2CidrIp": {
             "Default"    : "10.0.73.0/24", 
-            "Description": "Subnet Private Fix B CIDR IP", 
-            "Type"       : "String"
-        },
-        "SubnetPrivateFixCCidrIp": {
-            "Default"    : "10.0.74.0/24", 
-            "Description": "Subnet Private Fix C CIDR IP", 
+            "Description": "Subnet Private Fix 2 CIDR IP", 
             "Type"       : "String"
         }
     }, 
@@ -208,413 +188,270 @@
             }, 
             "Type": "AWS::EC2::Route"
         },
-	"EC2SubnetPublicVarA": {
+	"EC2SubnetPublicVar1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicVarACidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az1" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPublicVar1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetPublicVarB": {
+        "EC2SubnetPublicVar2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicVarBCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPublicVar2CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetPublicVarC": {
+	"EC2SubnetPublicFix1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicVarCCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPublicFix1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-	"EC2SubnetPublicFixA": {
+        "EC2SubnetPublicFix2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicFixACidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-        "EC2SubnetPublicFixB": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicFixBCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPublicFix2CidrIp" },
 		"VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetPublicFixC": {
+	"EC2SubnetProtectedVar1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetPublicFixCCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetProtectedVar1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-	"EC2SubnetProtectedVarA": {
+        "EC2SubnetProtectedVar2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedVarACidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetProtectedVar2CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetProtectedVarB": {
+        "EC2SubnetProtectedFix1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedVarBCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetProtectedFix1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetProtectedVarC": {
+        "EC2SubnetProtectedFix2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedVarCCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetProtectedFix2CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetProtectedFixA": {
+        "EC2SubnetPrivateVar1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedFixACidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPrivateVar1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetProtectedFixB": {
+        "EC2SubnetPrivateVar2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedFixBCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPrivateVar2CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetProtectedFixC": {
+	"EC2SubnetPrivateFix1": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetProtectedFixCCidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPrivateFix1CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetPrivateVarA": {
+        "EC2SubnetPrivateFix2": {
             "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateVarACidrIp" },
+                "AvailabilityZone": { "Fn::Join": [ "", [ { "Ref": "AWS::Region" }, { "Ref": "Az2" }  ] ] }, 
+                "CidrBlock": { "Ref": "SubnetPrivateFix2CidrIp" },
                 "VpcId": { "Ref": "EC2VPCBase" }
             }, 
             "Type": "AWS::EC2::Subnet"
         }, 
-        "EC2SubnetPrivateVarB": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateVarBCidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-        "EC2SubnetPrivateVarC": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateVarCCidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-	"EC2SubnetPrivateFixA": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzA" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateFixACidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-        "EC2SubnetPrivateFixB": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzB" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateFixBCidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-        "EC2SubnetPrivateFixC": {
-            "Properties": {
-                "AvailabilityZone": { "Fn::FindInMap": [ "AvailabilityZoneMap", { "Ref": "AWS::Region" }, "AzC" ] }, 
-                "CidrBlock": { "Ref": "SubnetPrivateFixCCidrIp" },
-                "VpcId": { "Ref": "EC2VPCBase" }
-            }, 
-            "Type": "AWS::EC2::Subnet"
-        }, 
-	"EC2SubnetNetworkAclAssociationPublicVarA": {
+	"EC2SubnetNetworkAclAssociationPublicVar1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarA" }
+                "SubnetId": { "Ref": "EC2SubnetPublicVar1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPublicVarB": {
+        "EC2SubnetNetworkAclAssociationPublicVar2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarB" }
+                "SubnetId": { "Ref": "EC2SubnetPublicVar2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPublicVarC": {
+	"EC2SubnetNetworkAclAssociationPublicFix1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicVarC" }
+                "SubnetId": { "Ref": "EC2SubnetPublicFix1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        },	
-	"EC2SubnetNetworkAclAssociationPublicFixA": {
+        }, 
+        "EC2SubnetNetworkAclAssociationPublicFix2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixA" }
+                "SubnetId": { "Ref": "EC2SubnetPublicFix2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPublicFixB": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixB" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        }, 
-        "EC2SubnetNetworkAclAssociationPublicFixC": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclExternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPublicFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        }, 
-        "EC2SubnetNetworkAclAssociationProtectedVarA": {
+        "EC2SubnetNetworkAclAssociationProtectedVar1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarA" }
+                "SubnetId": { "Ref": "EC2SubnetProtectedVar1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationProtectedVarB": {
+        "EC2SubnetNetworkAclAssociationProtectedVar2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarB" }
+                "SubnetId": { "Ref": "EC2SubnetProtectedVar2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationProtectedVarC": {
+        "EC2SubnetNetworkAclAssociationProtectedFix1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedVarC" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        }, 	
-        "EC2SubnetNetworkAclAssociationProtectedFixA": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixA" }
+                "SubnetId": { "Ref": "EC2SubnetProtectedFix1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationProtectedFixB": {
+        "EC2SubnetNetworkAclAssociationProtectedFix2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixB" }
+                "SubnetId": { "Ref": "EC2SubnetProtectedFix2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationProtectedFixC": {
+        "EC2SubnetNetworkAclAssociationPrivateVar1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetProtectedFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        },
-        "EC2SubnetNetworkAclAssociationPrivateVarA": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarA" }
+                "SubnetId": { "Ref": "EC2SubnetPrivateVar1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPrivateVarB": {
+        "EC2SubnetNetworkAclAssociationPrivateVar2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarB" }
+                "SubnetId": { "Ref": "EC2SubnetPrivateVar2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPrivateVarC": {
+        "EC2SubnetNetworkAclAssociationPrivateFix1": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateVarC" }
+                "SubnetId": { "Ref": "EC2SubnetPrivateFix1" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPrivateFixA": {
+        "EC2SubnetNetworkAclAssociationPrivateFix2": {
             "Properties": {
                 "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixA" }
+                "SubnetId": { "Ref": "EC2SubnetPrivateFix2" }
             }, 
             "Type": "AWS::EC2::SubnetNetworkAclAssociation"
         }, 
-        "EC2SubnetNetworkAclAssociationPrivateFixB": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixB" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        }, 
-        "EC2SubnetNetworkAclAssociationPrivateFixC": {
-            "Properties": {
-                "NetworkAclId": { "Ref": "EC2NetworkAclInternal" }, 
-                "SubnetId": { "Ref": "EC2SubnetPrivateFixC" }
-            }, 
-            "Type": "AWS::EC2::SubnetNetworkAclAssociation"
-        }, 
-	"EC2SubnetRouteTableAssociationPublicVarA": {
+	"EC2SubnetRouteTableAssociationPublicVar1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicVarA" }
+                "SubnetId"    : { "Ref": "EC2SubnetPublicVar1" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPublicVarB": {
+        "EC2SubnetRouteTableAssociationPublicVar2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicVarB" }
+                "SubnetId"    : { "Ref": "EC2SubnetPublicVar2" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPublicVarC": {
+        "EC2SubnetRouteTableAssociationPublicFix1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicVarC" }
+                "SubnetId"    : { "Ref": "EC2SubnetPublicFix1" }
             } 
-        },
-        "EC2SubnetRouteTableAssociationPublicFixA": {
+        }, 
+        "EC2SubnetRouteTableAssociationPublicFix2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicFixA" }
+                "SubnetId"    : { "Ref": "EC2SubnetPublicFix2" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPublicFixB": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicFixB" }
-            } 
-        }, 
-        "EC2SubnetRouteTableAssociationPublicFixC": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTablePublic" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPublicFixC" }
-            } 
-        },
-        "EC2SubnetRouteTableAssociationProtectedVarA": {
+        "EC2SubnetRouteTableAssociationProtectedVar1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarA" }
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedVar1" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationProtectedVarB": {
+        "EC2SubnetRouteTableAssociationProtectedVar2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarB" }
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedVar2" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationProtectedVarC": {
+        "EC2SubnetRouteTableAssociationProtectedFix1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedVarC" }
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedFix1" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationProtectedFixA": {
+        "EC2SubnetRouteTableAssociationProtectedFix2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixA" }
+                "SubnetId"    : { "Ref": "EC2SubnetProtectedFix2" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationProtectedFixB": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixB" }
-            } 
-        }, 
-        "EC2SubnetRouteTableAssociationProtectedFixC": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTableProtected" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetProtectedFixC" }
-            } 
-        }, 
-        "EC2SubnetRouteTableAssociationPrivateVarA": {
+        "EC2SubnetRouteTableAssociationPrivateVar1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarA" }
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateVar1" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPrivateVarB": {
+        "EC2SubnetRouteTableAssociationPrivateVar2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarB" }
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateVar2" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPrivateVarC": {
+        "EC2SubnetRouteTableAssociationPrivateFix1": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateVarC" }
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateFix1" }
             } 
         }, 
-        "EC2SubnetRouteTableAssociationPrivateFixA": {
+        "EC2SubnetRouteTableAssociationPrivateFix2": {
             "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
                 "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixA" }
+                "SubnetId"    : { "Ref": "EC2SubnetPrivateFix2" }
             } 
-        }, 
-        "EC2SubnetRouteTableAssociationPrivateFixB": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixB" }
-            } 
-        }, 
-        "EC2SubnetRouteTableAssociationPrivateFixC": {
-            "Type"      : "AWS::EC2::SubnetRouteTableAssociation",
-            "Properties": {
-                "RouteTableId": { "Ref": "EC2RouteTablePrivate" }, 
-                "SubnetId"    : { "Ref": "EC2SubnetPrivateFixC" }
-            } 
-        }, 
-	"RDSDBSubnetGroup": {
-	    "Type"      : "AWS::RDS::DBSubnetGroup",
-            "Properties": {
-                "DBSubnetGroupDescription" : { "Ref" : "AWS::StackName" },
-                "SubnetIds"                : [
-		    { "Ref": "EC2SubnetPrivateVarA" },
-		    { "Ref": "EC2SubnetPrivateVarB" },
-                    { "Ref": "EC2SubnetPrivateVarC" }
-		]
-            }
-        }
+        } 
     },
     "Outputs": {
         "GithubMarkdown": {
@@ -625,21 +462,21 @@
             "Description": "VPC ID",
 	    "Value"      : { "Ref": "EC2VPCBase" }
         },
-        "SubnetIdPublicVarA": {
-            "Description": "Subnet ID Public Var A",
-            "Value"      : { "Ref": "EC2SubnetPublicVarA" }
+        "SubnetIdPublicVar1": {
+            "Description": "Subnet ID Public Var 1",
+            "Value"      : { "Ref": "EC2SubnetPublicVar1" }
         },
-        "SubnetIdPublicFixA": {
-            "Description": "Subnet ID Public Fix A",
-            "Value"      : { "Ref": "EC2SubnetPublicFixA" }
+        "SubnetIdPublicFix1": {
+            "Description": "Subnet ID Public Fix 1",
+            "Value"      : { "Ref": "EC2SubnetPublicFix1" }
         },
-        "SubnetIdPublicFixB": {
-            "Description": "Subnet ID Public Fix B",
-            "Value"      : { "Ref": "EC2SubnetPublicFixB" }
+        "SubnetIdPublicFix2": {
+            "Description": "Subnet ID Public Fix 2",
+            "Value"      : { "Ref": "EC2SubnetPublicFix2" }
         },
-        "SubnetIdProtectedFixA": {
-            "Description": "Subnet ID Protected Fix A",
-            "Value"      : { "Ref": "EC2SubnetProtectedFixA" }
+        "SubnetIdProtectedFix1": {
+            "Description": "Subnet ID Protected Fix 1",
+            "Value"      : { "Ref": "EC2SubnetProtectedFix1" }
         },
 	"RouteTableIdProtected": {
             "Description": "Route Table ID Protected",

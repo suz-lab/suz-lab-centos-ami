@@ -61,24 +61,24 @@
             "Description": "IAM Instance Profile", 
             "Type"       : "String"
         },
-        "SubnetIdA": {
+        "SubnetId1": {
             "Default"    : "subnet-xxxxxxxx",
-            "Description": "Subnet ID Zone A",
+            "Description": "Subnet ID Zone 1",
             "Type"       : "String"
         },
-        "SubnetIdB": {
+        "SubnetId2": {
             "Default"    : "subnet-xxxxxxxx",
-            "Description": "Subnet ID Zone B",
+            "Description": "Subnet ID Zone 2",
             "Type"       : "String"
         },
-        "PrivateIpAddressA": {
+        "PrivateIpAddress1": {
             "Default"    : "xxx.xxx.xxx.xxx",
-            "Description": "Private IP Address Zone A",
+            "Description": "Private IP Address Zone 1",
             "Type"       : "String"
         },
-        "PrivateIpAddressB": {
+        "PrivateIpAddress2": {
             "Default"    : "yyy.yyy.yyy.yyy",
-            "Description": "Private IP Address Zone B",
+            "Description": "Private IP Address Zone 2",
             "Type"       : "String"
         }
     }, 
@@ -163,7 +163,7 @@
                 "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
             }
         },
-        "Ec2InstanceHaNatA": {
+        "Ec2InstanceHaNat1": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "false", 
@@ -172,10 +172,10 @@
                 "KeyName"           : { "Ref": "KeyName" },
                 "SecurityGroupIds"  : [ { "Ref": "SecurityGroupIdOpNat" }, { "Ref": "SecurityGroupIdOdMaintenance" } ], 
                 "IamInstanceProfile": { "Ref": "IamInstanceProfile" },
-                "SubnetId"          : { "Ref": "SubnetIdA" },
-                "PrivateIpAddress"  : { "Ref": "PrivateIpAddressA" },
+                "SubnetId"          : { "Ref": "SubnetId1" },
+                "PrivateIpAddress"  : { "Ref": "PrivateIpAddress1" },
                 "Tags"              : [ 
-                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "a" ] ] } },
+                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "1" ] ] } },
                     { "Key": "suz:ha-group", "Value": { "Ref": "Name" } }
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
@@ -184,7 +184,7 @@
                 ] ] } }
             }   
         },
-        "Ec2InstanceHaNatB": {
+        "Ec2InstanceHaNat2": {
             "Type"      : "AWS::EC2::Instance",
             "Properties": {
                 "SourceDestCheck"   : "false", 
@@ -193,10 +193,10 @@
                 "KeyName"           : { "Ref": "KeyName" },
                 "SecurityGroupIds"  : [ { "Ref": "SecurityGroupIdOpNat" }, { "Ref": "SecurityGroupIdOdMaintenance" } ], 
                 "IamInstanceProfile": { "Ref": "IamInstanceProfile" },
-                "SubnetId"          : { "Ref": "SubnetIdB" },
-                "PrivateIpAddress"  : { "Ref": "PrivateIpAddressB" },
+                "SubnetId"          : { "Ref": "SubnetId2" },
+                "PrivateIpAddress"  : { "Ref": "PrivateIpAddress2" },
                 "Tags"              : [ 
-                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "b" ] ] } },
+                    { "Key": "Name"        , "Value": { "Fn::Join": [ "_", [ { "Ref": "Name" }, "2" ] ] } },
                     { "Key": "suz:ha-group", "Value": { "Ref": "Name" } }
                 ],   
                 "UserData"          : { "Fn::Base64": { "Fn::Join": [ "\n", [
@@ -205,25 +205,25 @@
                 ] ] } }
             }   
         },
-        "Ec2EIPHaNatA": {
+        "Ec2EIPHaNat1": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc",
-                "InstanceId": { "Ref": "Ec2InstanceHaNatA" }
+                "InstanceId": { "Ref": "Ec2InstanceHaNat1" }
             }  
         },    
-        "Ec2EIPHaNatB": {
+        "Ec2EIPHaNat2": {
             "Type"      : "AWS::EC2::EIP",
             "Properties": {
                 "Domain"    : "vpc",
-                "InstanceId": { "Ref": "Ec2InstanceHaNatB" }
+                "InstanceId": { "Ref": "Ec2InstanceHaNat2" }
             }  
         },  
  	"Ec2RouteHaNat": {
             "Type"      : "AWS::EC2::Route",
             "Properties": {
                 "DestinationCidrBlock": "0.0.0.0/0", 
-                "InstanceId"          : { "Ref": "Ec2InstanceHaNatA" },
+                "InstanceId"          : { "Ref": "Ec2InstanceHaNat1" },
                 "RouteTableId"        : { "Ref": "RouteTableId" }
             } 
         },
@@ -231,7 +231,7 @@
             "Type"      : "AWS::EC2::DHCPOptions",
             "Properties": {
                 "DomainNameServers" : [ "AmazonProvidedDNS" ],
-                "NtpServers"        : [ { "Ref": "PrivateIpAddressA" }, { "Ref": "PrivateIpAddressB" } ]
+                "NtpServers"        : [ { "Ref": "PrivateIpAddress1" }, { "Ref": "PrivateIpAddress2" } ]
             }
         },
         "Ec2VpcDhcpOptionsAssociation" : {
