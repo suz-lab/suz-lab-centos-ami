@@ -105,14 +105,24 @@
                 "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
             }
         },
-        "Ec2SecurityGroupEgressOpStepNtpInternet": {
+        "Ec2SecurityGroupEgressOpStepSmtpOpNat": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
+            "Properties": {                 
+                "GroupId"                   : { "Ref": "OpStep" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "25",
+                "ToPort"                    : "25",
+                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
+            }
+        },
+        "Ec2SecurityGroupEgressOpStepNtpOpNat": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId"                   : { "Ref": "OpStep" },
                 "IpProtocol"                : "17",
                 "FromPort"                  : "123",
                 "ToPort"                    : "123",
-                "CidrIp"                    : "0.0.0.0/0"
+                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
             }
         },
         "Ec2SecurityGroupIngressOpEc2SshOpStep": {
@@ -132,6 +142,26 @@
                 "IpProtocol"                : "6",
                 "FromPort"                  : "22",
                 "ToPort"                    : "22",
+                "SourceSecurityGroupId"     : { "Ref": "OpStep" }
+            }   
+        },   
+        "Ec2SecurityGroupIngressOpNatSmtpOpStep": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "25",
+                "ToPort"                    : "25",
+                "SourceSecurityGroupId"     : { "Ref": "OpStep" }
+            }   
+        },   
+        "Ec2SecurityGroupIngressOpNatNtpOpStep": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
+                "IpProtocol"                : "17",
+                "FromPort"                  : "123",
+                "ToPort"                    : "123",
                 "SourceSecurityGroupId"     : { "Ref": "OpStep" }
             }   
         },   

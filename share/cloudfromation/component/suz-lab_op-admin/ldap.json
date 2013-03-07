@@ -97,6 +97,36 @@
                 "VpcId"           : { "Ref": "VpcId" }
             }
         },
+        "Ec2SecurityGroupIngressOpAdminLdapOpEc2": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdmin" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpEc2" }
+            }
+        },
+        "Ec2SecurityGroupIngressOpAdminLdapOpStep": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdmin" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpStep" }
+            }
+        },
+        "Ec2SecurityGroupIngressOpAdminLdapOpNat": {
+            "Type"      : "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId"                   : { "Ref": "OpAdmin" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpNat" }
+            }
+        },
         "Ec2SecurityGroupIngressOpAdminHttpsOpAdminLb": {
             "Type"      : "AWS::EC2::SecurityGroupIngress",
             "Properties": {
@@ -107,34 +137,24 @@
                 "SourceSecurityGroupId"     : { "Ref": "OpAdminLb" }
             }
         },
-        "Ec2SecurityGroupIngressOpAdminSshOpStep": {
-            "Type"      : "AWS::EC2::SecurityGroupIngress",
-            "Properties": {
-                "GroupId"                   : { "Ref": "OpAdmin" },
-                "IpProtocol"                : "6",
-                "FromPort"                  : "22",
-                "ToPort"                    : "22",
-                "SourceSecurityGroupId"     : { "Ref": "SecurityGroupIdOpStep" }
-            }
-        },
-        "Ec2SecurityGroupEgressOpAdminSmtpOpNat": {
+        "Ec2SecurityGroupEgressOpEc2LdapOpAdmin": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId"                   : { "Ref": "OpAdmin" },
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpEc2" },
                 "IpProtocol"                : "6",
-                "FromPort"                  : "25",
-                "ToPort"                    : "25",
-                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
-        "Ec2SecurityGroupEgressOpAdminNtpOpNat": {
+        "Ec2SecurityGroupEgressOpStepLdapOpAdmin": {
             "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId"                   : { "Ref": "OpAdmin" },
-                "IpProtocol"                : "17",
-                "FromPort"                  : "123",
-                "ToPort"                    : "123",
-                "DestinationSecurityGroupId": { "Ref": "SecurityGroupIdOpNat" }
+                "GroupId"                   : { "Ref": "SecurityGroupIdOpStep" },
+                "IpProtocol"                : "6",
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
         "Ec2SecurityGroupEgressOpStepSshOpAdmin": {
@@ -147,24 +167,14 @@
                 "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
-        "Ec2SecurityGroupIngressOpNatSmtpOpAdmin": {
-            "Type"      : "AWS::EC2::SecurityGroupIngress",
+        "Ec2SecurityGroupEgressOpNatLdapOpAdmin": {
+            "Type"      : "AWS::EC2::SecurityGroupEgress",
             "Properties": {
                 "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
                 "IpProtocol"                : "6",
-                "FromPort"                  : "25",
-                "ToPort"                    : "25",
-                "SourceSecurityGroupId"     : { "Ref": "OpAdmin" }
-            }
-        },
-        "Ec2SecurityGroupIngressOpNatNtpOpAdmin": {
-            "Type"      : "AWS::EC2::SecurityGroupIngress",
-            "Properties": {
-                "GroupId"                   : { "Ref": "SecurityGroupIdOpNat" },
-                "IpProtocol"                : "17",
-                "FromPort"                  : "123",
-                "ToPort"                    : "123",
-                "SourceSecurityGroupId"     : { "Ref": "OpAdmin" }
+                "FromPort"                  : "389",
+                "ToPort"                    : "389",
+                "DestinationSecurityGroupId": { "Ref": "OpAdmin" }
             }
         },
         "Ec2SecurityGroupIngressOpAdminLbHttpsOpAdmin": {

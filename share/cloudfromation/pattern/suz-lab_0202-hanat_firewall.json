@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09", 
-    "Description": "SUZ-LAB Formation 0021", 
+    "Description": "SUZ-LAB Formation 0202 HA-NAT and Firewall", 
     "Mappings": {
         "AvailabilityZoneMap": {
             "ap-northeast-1": {
@@ -36,14 +36,14 @@
             "Description": "Ondemand Step Type",
             "Type"       : "String"
         },
-        "OpAdminType": {
-            "Default"    : "simple/0.0.1",
+        "OpFwOptionType": {
+            "Default"    : "vpc/0.0.1",
             "Description": "Operational Firewall Option Type", 
             "Type"       : "String"
         }
     },
     "Resources": {
-        "Pattern0000": {
+        "VpcBase": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": { "Fn::Join": [ "", [
@@ -51,25 +51,58 @@
                     { "Ref" : "AWS::Region" },
                     ".cloudformation.suz-lab.com.s3-",
                     { "Ref" : "AWS::Region" },
-                    ".amazonaws.com/cloudformation/pattern/suz-lab_0000/0.0.1.json"
+                    ".amazonaws.com/cloudformation/component/suz-lab_vpc-base/0.0.5.json"
                 ] ] },
                 "Parameters": {
-                    "VpcCidrIpFirst2Octets": { "Ref": "VpcCidrIpFirst2Octets" }
+                    "VpcCidrIp"                : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/16"  ] ] },
+                    "SubnetPublicVarACidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".0.0/24"  ] ] },
+                    "SubnetPublicVarBCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".1.0/24"  ] ] },
+                    "SubnetPublicVarCCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".2.0/24"  ] ] },
+                    "SubnetPublicFixACidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".8.0/24"  ] ] },
+                    "SubnetPublicFixBCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".9.0/24"  ] ] },
+                    "SubnetPublicFixCCidrIp"   : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".10.0/24" ] ] },
+                    "SubnetProtectedVarACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".32.0/24" ] ] },
+                    "SubnetProtectedVarBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".33.0/24" ] ] },
+                    "SubnetProtectedVarCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".34.0/24" ] ] },
+                    "SubnetProtectedFixACidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.0/24" ] ] },
+                    "SubnetProtectedFixBCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".41.0/24" ] ] },
+                    "SubnetProtectedFixCCidrIp": { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".42.0/24" ] ] },
+                    "SubnetPrivateVarACidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".64.0/24" ] ] },
+                    "SubnetPrivateVarBCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".65.0/24" ] ] },
+                    "SubnetPrivateVarCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".66.0/24" ] ] },
+                    "SubnetPrivateFixACidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".72.0/24" ] ] },
+                    "SubnetPrivateFixBCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".73.0/24" ] ] },
+                    "SubnetPrivateFixCCidrIp"  : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".74.0/24" ] ] } 
+                }
+            } 
+        },
+        "IamBase": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Join": [ "", [
+                    "http://",
+                    { "Ref" : "AWS::Region" },
+                    ".cloudformation.suz-lab.com.s3-",
+                    { "Ref" : "AWS::Region" },
+                    ".amazonaws.com/cloudformation/component/suz-lab_iam-base/0.0.2.json"
+                ] ] },
+                "Parameters": {
+                    "PolicyNameApi": "api" 
                 }
             }
         },
-        "Pattern0001": {
+        "OpFwBase": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": { "Fn::Join": [ "", [
-                    "http://",
+                    "http://", 
                     { "Ref" : "AWS::Region" },
                     ".cloudformation.suz-lab.com.s3-",
                     { "Ref" : "AWS::Region" },
-                    ".amazonaws.com/cloudformation/pattern/suz-lab_0001/0.0.1.json"
+                    ".amazonaws.com/cloudformation/component/suz-lab_op-fw-base/0.0.2.json"
                 ] ] },
-                "Parameters": {
-                    "VpcId"                : { "Fn::GetAtt": [ "Pattern0000", "Outputs.VpcId" ] }
+                "Parameters" : {
+                    "VpcId": { "Fn::GetAtt": [ "VpcBase" , "Outputs.VpcId" ] }
                 }
             }
         },
@@ -91,12 +124,12 @@
                     "KeyName"                     : { "Ref": "KeyName" },
                     "ImageId"                     : { "Ref": "ImageId" }, 
                     "SourceCidrIp"                : { "Ref": "SourceCidrIp" },
-                    "VpcId"                       : { "Fn::GetAtt": [ "Pattern0000", "Outputs.VpcId" ] },
-                    "SubnetId"                    : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdPublicVarA" ] },
-                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "Pattern0001", "Outputs.IamInstanceProfileApi" ] },
-                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpEc2" ] },
-                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpNat" ] },
-                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOdMaintenance" ] }
+                    "VpcId"                       : { "Fn::GetAtt": [ "VpcBase" , "Outputs.VpcId" ] },
+                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVarA" ] },
+                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "IamBase" , "Outputs.IamInstanceProfileApi" ] },
+                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] },
+                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
+                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOdMaintenance" ] }
                 }
             }
         },
@@ -117,14 +150,14 @@
                     "ImageId"                     : { "Ref": "ImageId" },
                     "PrivateIpAddressA"           : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".8.4"  ] ] },
                     "PrivateIpAddressB"           : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".9.4"  ] ] },
-                    "VpcId"                       : { "Fn::GetAtt": [ "Pattern0000", "Outputs.VpcId" ] },
-                    "RouteTableId"                : { "Fn::GetAtt": [ "Pattern0000", "Outputs.RouteTableIdProtected" ] },
-                    "SubnetIdA"                   : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdPublicFixA" ] },
-                    "SubnetIdB"                   : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdPublicFixB" ] },
-                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "Pattern0001", "Outputs.IamInstanceProfileApi" ] },
-                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpEc2" ] },
-                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpNat" ] },
-                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOdMaintenance" ] }
+                    "VpcId"                       : { "Fn::GetAtt": [ "VpcBase" , "Outputs.VpcId" ] },
+                    "RouteTableId"                : { "Fn::GetAtt": [ "VpcBase" , "Outputs.RouteTableIdProtected" ] },
+                    "SubnetIdA"                   : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicFixA" ] },
+                    "SubnetIdB"                   : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicFixB" ] },
+                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "IamBase" , "Outputs.IamInstanceProfileApi" ] },
+                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpEc2" ] },
+                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
+                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOdMaintenance" ] }
                 }
             }
         },
@@ -143,15 +176,15 @@
                     "InstanceType"                : "t1.micro",
                     "KeyName"                     : { "Ref": "KeyName" },
                     "ImageId"                     : { "Ref": "ImageId" },
-                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "Pattern0001", "Outputs.IamInstanceProfileApi" ] },
-                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpNat" ] },
-                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOdMaintenance" ] },
-                    "SubnetId"                    : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdPublicVarA" ] },
-                    "RouteTableId"                : { "Fn::GetAtt": [ "Pattern0000", "Outputs.RouteTableIdPrivate" ] }
-                }   
+                    "SubnetId"                    : { "Fn::GetAtt": [ "VpcBase" , "Outputs.SubnetIdPublicVarA" ] },
+                    "RouteTableId"                : { "Fn::GetAtt": [ "VpcBase" , "Outputs.RouteTableIdPrivate" ] },
+                    "IamInstanceProfile"          : { "Fn::GetAtt": [ "IamBase" , "Outputs.IamInstanceProfileApi" ] },
+                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOpNat" ] },
+                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "OpFwBase", "Outputs.SecurityGroupIdOdMaintenance" ] }
+                }
             }   
-        }, 
-        "OpAdmin": {
+        },
+        "OpFwOption": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": { "Fn::Join": [ "", [
@@ -159,25 +192,12 @@
                     { "Ref" : "AWS::Region" },
                     ".cloudformation.suz-lab.com.s3-",
                     { "Ref" : "AWS::Region" },
-                    ".amazonaws.com/cloudformation/component/suz-lab_op-admin/",
-                    { "Ref" : "OpAdminType" },
+                    ".amazonaws.com/cloudformation/component/suz-lab_op-fw-option/",
+                    { "Ref" : "OpFwOptionType" },
                     ".json"
                 ] ] },
                 "Parameters": {
-                    "Name"                        : "op-admin",
-	            "InstanceType"                : "t1.micro",
-                    "ImageId"                     : { "Ref": "ImageId" },
-                    "KeyName"                     : { "Ref": "KeyName" },
-                    "SourceCidrIp"                : { "Ref": "SourceCidrIp" },
-                    "PrivateIpAddress"            : { "Fn::Join": [ "", [ { "Ref": "VpcCidrIpFirst2Octets" }, ".40.4"  ] ] },
-                    "VpcId"                       : { "Fn::GetAtt": [ "Pattern0000", "Outputs.VpcId" ] },
-                    "SubnetIdEc2"                 : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdProtectedFixA" ] },
-                    "SubnetIdElb"                 : { "Fn::GetAtt": [ "Pattern0000", "Outputs.SubnetIdPublicVarA" ] },
-                    "SecurityGroupIdOpEc2"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpEc2" ] },
-                    "SecurityGroupIdOpNat"        : { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOpNat" ] },
-                    "SecurityGroupIdOdMaintenance": { "Fn::GetAtt": [ "Pattern0001", "Outputs.SecurityGroupIdOdMaintenance" ] },
-	            "IamInstanceProfile"          : { "Fn::GetAtt": [ "Pattern0001", "Outputs.IamInstanceProfileApi" ] },
-                    "SecurityGroupIdOpStep"       : { "Fn::GetAtt": [ "OdStep"     , "Outputs.SecurityGroupIdOpStep" ] }
+                    "VpcId": { "Fn::GetAtt": [ "VpcBase", "Outputs.VpcId" ] }
                 }
             }
         }
@@ -201,7 +221,7 @@
                 ".amazonaws.com/cloudformation/pattern/suz-lab_0001/0.0.1.json"
             ] ] }
         }, 
-	"CacooImage": {
+        "CacooImage": {
             "Description": "Cacoo Image",
             "Value"      : "https://cacoo.com/diagrams/XXXXXXXXXXXXXXXX-XXXXX.png"
         }
