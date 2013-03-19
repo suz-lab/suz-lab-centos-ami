@@ -1,0 +1,42 @@
+#/bin/sh
+trap 'echo "NG: $?"' ERR
+set -e
+
+yum -y install openvpn
+cd /usr/share/doc/openvpn-2.2.2/easy-rsa/2.0/
+ln -s openssl-1.0.0.cnf openssl.cnf 
+ls -1 | grep -v "\.cnf" | grep -v Makefile | grep -v README | grep -v keys | xargs chmod a+x
+source vars 
+./clean-all
+./pkitool --initca
+./pkitool --server server
+./build-dh
+cp keys/ca.crt keys/server.crt keys/server.key keys/dh1024.pem /etc/openvpn/
+cp /usr/share/doc/openvpn-2.2.2/sample-config-files/server.conf /etc/openvpn/
+
+MAC=`curl -s http://169.254.169.254/latest/meta-data/mac`
+CIDR=`curl -s http://169.254.169.254/latest/meta-data/network/interfaces/macs/$MAC/vpc-ipv4-cidr-block`
+NETWORK=`ipcalc -n $CIDR | cut -c9-`
+NETMASK=`ipcalc -m $CIDR | cut -c9-`
+cat << EOT > /etc/openvpn/server.conf 
+port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server.crt
+key server.key
+dh dh1024.pem
+server 10.255.0.0 255.255.0.0
+ifconfig-pool-persist ipp.txt
+push "route $NETWORK $NETMASK"
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+status openvpn-status.log
+verb 3
+EOT
+
+service openvpn start
+chkconfig openvpn on
+exit 0
