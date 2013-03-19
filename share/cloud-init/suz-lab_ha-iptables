@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+trap 'echo "NG: $?"' ERR
+pcs property set no-quorum-policy=ignore
+pcs property set stonith-enabled=false
+pcs resource rsc defaults resource-stickiness=INFINITY migration-threshold=1
+pcs resource create iptables lsb:iptables op monitor interval="5s"
+exit 0
