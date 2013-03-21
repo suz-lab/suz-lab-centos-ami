@@ -1,5 +1,4 @@
 #!/bin/sh
 set -e
-trap 'echo "NG: $?"' ERR
 /opt/suz-lab/share/cloud-init/component/suz-lab_openvpn
 exit 0
