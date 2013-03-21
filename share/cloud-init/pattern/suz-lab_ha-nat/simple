@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-trap 'echo "NG: $?"' ERR
 /opt/suz-lab/share/cloud-init/component/suz-lab_nat
-/opt/suz-lab/share/cloud-init/component/suz-lab_ha
+/opt/suz-lab/share/cloud-init/component/suz-lab_ha $1
 exit 0
