@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # chkconfig: 2345 99 10
-# description: Associate EIP
+# description: Associate Routing
 
 # Source Function Library
 . /etc/init.d/functions

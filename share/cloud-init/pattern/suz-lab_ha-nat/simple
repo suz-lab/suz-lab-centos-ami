@@ -1,5 +1,12 @@
 #!/bin/sh
 set -e
+
 /opt/suz-lab/share/cloud-init/component/suz-lab_nat
 /opt/suz-lab/share/cloud-init/component/suz-lab_ha $1
+
+ln -s /opt/suz-lab/etc/init/associate-routing /etc/init.d/associate-routing
+cat << EOT > /etc/sysconfig/associate-routing
+ROUTE_TABLE_ID=$2
+EOT
+
 exit 0

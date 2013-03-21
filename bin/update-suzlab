@@ -4,5 +4,6 @@ cd /opt/suz-lab/
 git checkout . 2>&1 | logger -s -t ${0##*/}
 git pull 2>&1 | logger -s -t ${0##*/}
 chmod 755 /opt/suz-lab/bin/*
+chmod 755 /opt/suz-lab/etc/init/*
 chmod -R 755 /opt/suz-lab/share/cloud-init/*
 exit 0
