@@ -6,5 +6,6 @@ pcs property set stonith-enabled=false
 pcs resource rsc defaults resource-stickiness=INFINITY migration-threshold=1
 pcs resource create iptables lsb:iptables op monitor interval="5s"
 pcs resource create associate-routing lsb:associate-routing
+pcs resource group add ha-nat iptables associate-routing
 
 exit 0
