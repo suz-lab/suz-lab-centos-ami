@@ -1,5 +1,4 @@
 #/bin/sh
-trap 'echo "NG: $?"' ERR
 set -e
 
 yum -y install openvpn
@@ -39,4 +38,5 @@ EOT
 
 service openvpn start
 chkconfig openvpn on
+
 exit 0

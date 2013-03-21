@@ -1,34 +1,11 @@
 #/bin/sh
-trap 'echo "NG: $?"' ERR
 set -e
 
 yum -y install corosync pacemaker pcs
 
 INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
 MY_IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`
-HA_GROUP=`aws ec2 describe-instances --instance-ids $INSTANCE_ID \
-| jq '.Reservations[] | .Instances[] | .Tags[] | select(.Key == "suz:ha-group") | .Value'`
-
-RETRY_COUNT=5
-RETRY_INTERVAL=1
-set +e
-COUNT=0
-while true; do
-    YOUR_IP=`aws ec2 describe-instances --filters '{"name":"tag:suz:ha-group","values":['$HA_GROUP']}' \
-    | jq '.Reservations[] | .Instances[] | .NetworkInterfaces[] | .PrivateIpAddress | select(. != "'$MY_IP'")' \
-    | cut -f 2 -d \"`
-    if [ $? -eq 0 ]; then
-        break
-    fi
-    if [ $COUNT -eq $RETRY_COUNT ]; then
-        echo "Timeout!" >&2
-        exit 1
-    fi
-    COUNT=`expr $COUNT + 1`
-    sleep $RETRY_INTERVAL
-done
-
-set -e
+YOUR_IP=$1
 
 cat << EOT > /etc/corosync/corosync.conf
 compatibility: whitetank
