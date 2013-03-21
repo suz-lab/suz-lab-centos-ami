@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-trap 'echo "NG: $?"' ERR
 yum clean all
 rm -rf /tmp/*
 rm -f  /etc/ssh/ssh_host_*

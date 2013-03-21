@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
-trap 'echo "NG: $?"' ERR
 cd /opt/suz-lab/
+git checkout . 2>&1 | logger -s -t ${0##*/}
 git pull 2>&1 | logger -s -t ${0##*/}
 chmod 755 /opt/suz-lab/bin/*
 chmod -R 755 /opt/suz-lab/share/cloud-init/*
