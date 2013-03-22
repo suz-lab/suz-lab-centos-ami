@@ -5,7 +5,7 @@ yum -y install openvpn
 cd /usr/share/doc/openvpn-2.2.2/easy-rsa/2.0/
 ln -s openssl-1.0.0.cnf openssl.cnf 
 ls -1 | grep -v "\.cnf" | grep -v Makefile | grep -v README | grep -v keys | xargs chmod a+x
-source vars 
+source ./vars 
 ./clean-all
 ./pkitool --initca
 ./pkitool --server server
