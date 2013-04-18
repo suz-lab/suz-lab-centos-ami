@@ -1,0 +1,26 @@
+#/bin/sh
+set -e
+
+cat << EOT > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+BOOTPROTO=dhcp
+ONBOOT=on
+PEERNTP=no
+EOT
+
+service network restart
+
+cat << EOT > /etc/ntp.conf
+driftfile /var/lib/ntp/drift
+restrict default kod nomodify notrap nopeer noquery
+restrict 127.0.0.1
+server 0.centos.pool.ntp.org
+server 1.centos.pool.ntp.org
+server 2.centos.pool.ntp.org
+includefile /etc/ntp/crypto/pw
+keys /etc/ntp/keys
+EOT
+
+service ntpd restart
+
+exit 0
